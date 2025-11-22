@@ -5,6 +5,7 @@ require_once '../Php/connection.php';
 
 // Create the Transport
 // Create the Transport
+/*
 $transport = (new Swift_SmtpTransport('mail.datmaster.co.za', 465,'ssl'))
 
   ->setUsername('noreply@datmaster.co.za')
@@ -21,10 +22,13 @@ $message = (new Swift_Message('Wonderful Subject'))
   ->setBody('Here is the message itself')
   ;
   $result = $mailer->send($message);
+*/
 
  function verifyAccount($email,$verifytoken)
  {
-
+    // Mock email sending
+    return true;
+    /*
   global $mailer;
   $body='<!DOCTYPE html>
   <html lang="en">
@@ -51,11 +55,15 @@ $message = (new Swift_Message('Wonderful Subject'))
 
 // Send the message
 $result = $mailer->send($message);
+*/
   
  }
 // Send the message
 function sendEmail($userEmail,$token)
 {
+    // Mock email sending
+    return true;
+    /*
     global $mailer;
     $body='<!DOCTYPE html>
     <html lang="en">
@@ -82,5 +90,6 @@ function sendEmail($userEmail,$token)
 
 // Send the message
 $result = $mailer->send($message);
+*/
 
 }

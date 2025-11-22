@@ -105,7 +105,7 @@ if ($stmt = $conn->prepare('INSERT INTO `admin_table` (firstname, surname, email
 		confirmButtonColor: '#3085d6',
 
 	}).then(function(){
-		window.location.href='http://localhost/Admin_Dash-board/pages/verify-message.html';
+		window.location.href='../pages/verify-message.html';
 	});
 	</script>");
   //header('location: ../pages/verify-message.html');
