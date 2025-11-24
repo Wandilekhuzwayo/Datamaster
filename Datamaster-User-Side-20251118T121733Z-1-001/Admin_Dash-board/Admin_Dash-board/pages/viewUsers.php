@@ -8,11 +8,11 @@
   //Select query
   if(isset($_POST['search-info'])){
     $searchValue = $_POST['search'];
-    $query = "SELECT fname, lname, mnum, email, email_phone, timein FROM `user_table` AS u INNER JOIN `questions_table` AS q ON u.email = q.email_phone WHERE CONCAT(`fname`, `lname`, `mnum`, `email`, `email_phone`, `timein`) LIKE '%".$searchValue."%'";
+    $query = "SELECT * FROM `admin_table` WHERE CONCAT(`firstname`, `surname`, `email`, `employeeNo`, `department`) LIKE '%".$searchValue."%'";
     $result = filterTable($query);
   }
   else {
-    $query = "SELECT q.id, u.fname, u.lname, u.mnum, u.email, q.email_phone, q.timein FROM `user_table` AS u INNER JOIN `questions_table` AS q ON u.email = q.email_phone WHERE q.timeout = '"." "."' ";
+    $query = "SELECT * FROM `admin_table`";
     $result = filterTable($query);
   }
 
@@ -34,7 +34,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-        <title>Datamaster History
+        <title>Datamaster - View Users
 		</title>
 	    <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
@@ -72,7 +72,7 @@
             <h3><img src="../images/Logo Icon.png" alt="Logo"><span> Datamaster</span></h3>
         </div>
         <ul class="list-unstyled components">
-        <li  class="active">
+        <li  class="">
                 <a href="../pages/index.php" class="dashboard"><i class=" bi bi-speedometer2 material-icons"></i><span>Dashboard</span></a>
             </li>
     
@@ -80,15 +80,15 @@
             
             </div>
         
-            <li class="dropdown">
-                <a href="#homeSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+            <li class="dropdown active">
+                <a href="#homeSubmenu1" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
                 <i class="bi bi-people material-icons"></i><span>Manage Users</span></a>
-                <ul class="collapse list-unstyled menu" id="homeSubmenu1">
+                <ul class="collapse list-unstyled menu show" id="homeSubmenu1">
                     <li>
                         <a href="../pages/signup.html"><i class="bi bi-person-plus material-icons"></i><span>Add Users</span></a>
                     </li>
-                    <li>
-                        <a href="#"><i class="bi bi-person-workspace material-icons"></i> <span>View Users</span></a>
+                    <li class="active">
+                        <a href="../pages/viewUsers.php"><i class="bi bi-person-workspace material-icons"></i> <span>View Users</span></a>
                     </li>
                    
                 </ul>
@@ -186,9 +186,9 @@
         
         <div class="main-content">
             <div class="d-sm-flex align-items-center justify-content-between mb-3">
-                <h1 class="h3 mb-0 ">Dashboard</h1>
+                <h1 class="h3 mb-0 ">View Users</h1>
                 <!--Do A form here please-->
-                <form action="activeVisitors.php" method="POST">
+                <form action="viewUsers.php" method="POST">
                 <input type="text" class="control-search" name="search" placeholder="Search Here"/>
                 <button type="submit" class="btn btn-primary" name="search-info"><i class="fa fa-search" aria-hidden="true"></i></button>
 
@@ -209,15 +209,15 @@
                                     
                                     <th>No. 
                                               
-                                    </th> <th>Name 
+                                    </th> <th>First Name 
                                               
                                     </th> <th>Surname 
                                           
-                                    </th> <th>Phone 
-                                          
                                     </th> <th>Email 
+                                          
+                                    </th> <th>Employee No 
                                            
-                                    </th> <th>Time & Date In
+                                    </th> <th>Department
                                     </th> 
                                    </tr>
                                 </thead>
@@ -231,15 +231,15 @@
                                     <td>
                                         <?php echo $no; ?>
                                     </td> <td>
-                                        <?php echo $data['fname']; ?>
+                                        <?php echo $data['firstname']; ?>
                                      </td> <td>
-                                        <?php echo $data['lname']; ?>
-                                      </td> <td>
-                                        <?php echo $data['mnum']; ?>
+                                        <?php echo $data['surname']; ?>
                                       </td> <td>
                                         <?php echo $data['email']; ?>
                                       </td> <td>
-                                         <?php echo $data['timein']; ?>
+                                        <?php echo $data['employeeNo']; ?>
+                                      </td> <td>
+                                         <?php echo $data['department']; ?>
                                       </td> 
                                    </tr>
                                    <?php $no++;
@@ -259,31 +259,13 @@
                        </div>
                        </form>
                        <div class="panel-footer">
-                          <div   type="'excel'"  class="ng-isolate-scope"><a class="ng-excel"><span></span></a></div>
-                          <a href="../php/downloadVisitors.php" style="margin-left: 7px"   class="btn btn-success ng-binding">Download XLS</a>   
+                          <!-- <div   type="'excel'"  class="ng-isolate-scope"><a class="ng-excel"><span></span></a></div>
+                          <a href="../php/downloadVisitors.php" style="margin-left: 7px"   class="btn btn-success ng-binding">Download XLS</a> -->   
                        </div>
                     </div>
                  </div>
               </div>
            </div>
-
-
-            <!--<div class="row">
-                <div class="col-xl-8 col-lg-7">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-secondary">Daily Visitors count</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="chart-area">
-                                <canvas id="myAreaChart"></canvas>
-                            </div>
-
-                        </div>
-                    </div> 
-
-                </div>
-            </div>--> 
         </div>
                 
                 <footer class="footer" style="position: fixed; bottom: 0;">
@@ -345,5 +327,3 @@
 </body>
   
 </html>
-
-

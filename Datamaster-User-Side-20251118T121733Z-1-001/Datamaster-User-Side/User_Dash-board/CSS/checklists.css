@@ -1,0 +1,322 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: #fff;
+  min-height: 100vh;
+}
+
+.wrapper {
+  max-width: 1000px;
+  background-color: #fff;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  margin: 50px auto;
+  box-shadow: 0 8px 20px 0px #1f1f1f1a;
+  overflow: hidden;
+}
+
+.wrapper .form-left {
+  background: #3e3c3c;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  padding: 20px 40px;
+  position: relative;
+  width: 100%;
+  color: #fff;
+}
+
+.wrapper h2 {
+  font-weight: 700;
+  font-size: 25px;
+  padding: 5px 0 0;
+  margin-bottom: 34px;
+  margin-left: 30px;
+  pointer-events: none;
+  color: #3e3c3c;
+}
+
+.wrapper .form-left .text-uppercases {
+  color: #fff;
+  font-weight: 700;
+  font-size: 25px;
+  padding: 5px 0 0;
+  margin-bottom: 30px;
+  margin-left: 34px;
+  pointer-events: none;
+}
+
+.wrapper .form-left label {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  pointer-events: none;
+}
+
+.wrapper .form-left .fname {
+  width: 100%;
+  float: left;
+  padding: 5px;
+  margin-top: 10px;
+  margin-left: -30px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.wrapper .form-left .mobile {
+  width: 100%;
+  text-align: left;
+  vertical-align: middle;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.wrapper .form-left .companyName {
+  width: 100%;
+  text-align: left;
+  vertical-align: middle;
+  display: inline-block;
+  margin-top: 18px;
+}
+
+.wrapper .form-left .emailAddress {
+  width: 100%;
+  text-align: left;
+  vertical-align: middle;
+  display: inline-block;
+  margin-top: 18px;
+}
+
+.wrapper .form-left .homeAddress {
+  width: 100%;
+  text-align: left;
+  vertical-align: middle;
+  display: inline-block;
+  margin-top: 18px;
+}
+
+.wrapper .form-left .countryName {
+  width: 100%;
+  text-align: left;
+  vertical-align: middle;
+  display: inline-block;
+  margin-top: 18px;
+}
+
+.wrapper .form-left .province {
+  width: 100%;
+  text-align: left;
+  vertical-align: middle;
+  display: inline-block;
+  margin-top: 18px;
+}
+
+.wrapper .form-left .town {
+  width: 100%;
+  text-align: left;
+  vertical-align: middle;
+  display: inline-block;
+  margin-top: 18px;
+}
+
+.wrapper .form-left .zipCode {
+  width: 100%;
+  text-align: left;
+  vertical-align: middle;
+  display: inline-block;
+  margin-top: 18px;
+}
+
+.wrapper .form-left .end {
+  width: 100%;
+  float: left;
+  margin-top: 230px;
+}
+
+.wrapper .form-right {
+  padding: 20px 40px;
+  position: relative;
+  width: 100%;
+}
+
+.wrapper .form-right .img img {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  height: 145px;
+  margin-top: -30px;
+  margin-left: 1rem;
+  background-color: transparent;
+}
+
+.wrapper .form-right h2 {
+  color: #3e3c3c;
+  margin-left: 100px;
+  margin-bottom: 2rem;
+}
+
+.wrapper .form-right p {
+  font-weight: 800;
+  font-size: 20px;
+  color: #8d8d8d;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.wrapper .form-right label {
+  font-weight: 600;
+  font-size: 15px;
+  color: #8d8d8d;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.wrapper .form-right .input-field {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #8d8d8d;
+  border-top-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  outline: none;
+  color: #8d8d8d;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+}
+
+.wrapper .form-right .input-date {
+  width: 100%;
+  padding: 0;
+  border: none;
+  outline: none;
+  color: #8d8d8d;
+}
+
+.wrapper .form-right .input-field:focus {
+  border: 1px solid #8d8d8d;
+}
+
+.wrapper .option {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  font-weight: 900;
+  cursor: pointer;
+  user-select: none;
+}
+
+.wrapper .option input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.wrapper .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #fff;
+  border: 2px solid #ddd;
+  border-radius: 2px;
+}
+
+.wrapper .option:hover input ~ .checkmark {
+  background-color: #f1f1f1;
+}
+
+.wrapper .option input:checked ~ .checkmark {
+  border: 2px solid #e5e5e5;
+  background-color: #fff;
+  transition: 300ms ease-in-out all;
+}
+
+.wrapper .checkmark:after {
+  content: "\2713";
+  position: absolute;
+  display: none;
+  color: #ace5ee;
+  font-size: 1rem;
+}
+
+.wrapper .option input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.wrapper .option .checkmark:after {
+  left: 2px;
+  top: -4px;
+  width: 5px;
+  height: 10px;
+}
+
+.wrapper .register {
+  padding: 12px;
+  background: #3e3c3c;
+  border-top-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  min-width: 100%;
+  height: 50px;
+  border: none;
+  margin: 6px 0 50px 0px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.wrapper .register:hover {
+  background-color: #000;
+  box-shadow: none;
+  color: #fff;
+}
+
+.wrapper a {
+  text-decoration: none;
+}
+
+@media (max-width: 860.5px) {
+  .wrapper {
+    margin: 50px 5px;
+  }
+}
+
+@media (max-width: 767.5px) {
+  .wrapper {
+    flex-direction: column;
+    margin: 30px 20px;
+  }
+
+  .wrapper .form-left {
+    border-bottom-left-radius: 0px;
+  }
+}
+
+@media (max-width: 575px) {
+  .wrapper {
+    margin: 30px 15px;
+  }
+
+  .wrapper .form-left {
+    padding: 25px;
+  }
+  .wrapper .form-right {
+    padding: 25px;
+  }
+}
+
