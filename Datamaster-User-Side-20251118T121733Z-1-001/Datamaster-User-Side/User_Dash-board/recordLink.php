@@ -54,8 +54,25 @@
   //Insert into user table
   $query = "INSERT INTO `user_table`(date, image, fname, lname, mnum, cname, email, address, country, province, city, code, name, surname, contact, subscription)VALUES('$date', '".$imageName."', '".$firstname."', '".$lastname."', '".$phone."', '".$company."', '".$email."', '".$address."', '".$country."', '".$state."', '".$city."', '".$code."', '".$name."', '".$surname."', '".$contact."', '".$subscription."')";
 
-  //Execution
-  $result = mysqli_query($conn, $query);
+  //Check for duplicate user
+  $checkQuery = "SELECT * FROM `user_table` WHERE email = '$email' OR mnum = '$phone'";
+  $checkResult = mysqli_query($conn, $checkQuery);
+
+  if (mysqli_num_rows($checkResult) > 0) {
+    echo ("<script LANGUAGE='JavaScript'>
+    Swal.fire({
+      icon: 'error',
+      text: 'User with this email or phone number already exists!',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#3085d6', 
+          
+    }).then(function(){
+      window.location.href='Register.html';
+    });
+    </script>");
+  } else {
+    //Execution
+    $result = mysqli_query($conn, $query);
 
   if($result){
     echo ("<script LANGUAGE='JavaScript'>
@@ -66,7 +83,7 @@
       confirmButtonColor: '#3085d6',
           
     }).then(function(){
-      window.location.href='http://localhost/Datamaster-User-Side/Retrieve.html';
+      window.location.href='Retrieve.html';
     });
     </script>");
   }
@@ -79,9 +96,12 @@
       confirmButtonColor: '#3085d6', 
           
     }).then(function(){
-      window.location.href='http://localhost/Datamaster-User-Side/Record.html';
+      window.location.href='Record.html';
     });
     </script>");
   }
+  }
 }
+
+
 ?>

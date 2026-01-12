@@ -42,7 +42,7 @@
         confirmButtonColor: '#3085d6',
           
       }).then(function(){
-        window.location.href='http://localhost/Datamaster-User-Side/Vacate.php?redeemedData=$email';
+        window.location.href='Vacate.php?redeemedData=$email';
       });
       </script>");
     }
@@ -55,7 +55,7 @@
         confirmButtonColor: '#3085d6',
 
       }).then(function(){
-        window.location.href='http://localhost/Datamaster-User-Side/Redeem.html';
+        window.location.href='Redeem.php';
       });
       </script>");
     }

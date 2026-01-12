@@ -9,7 +9,7 @@
   $email = $_GET['retrievedEmail'];
 
   //Create a query
-  $result = mysqli_query($conn, "SELECT image, fname, lname FROM `user_table` WHERE mnum LIKE '%{$email}%' OR email LIKE '%{$email}%' ");
+  $result = mysqli_query($conn, "SELECT image, fname, lname FROM `user_table` WHERE mnum LIKE '%{$email}%' OR email LIKE '%{$email}%' LIMIT 1");
 
   if($result) {
     //Get data from table user_table row
@@ -88,7 +88,7 @@
           //Again access variable
           $emailAddress = $_GET['retrievedEmail'];
 
-          echo "window.location.href='http://localhost/Datamaster-User-Side/Checklist.php?progressedEmail=$emailAddress'";
+          echo "window.location.href='Checklist.php?progressedEmail=$emailAddress'";
         ?>
 
       });

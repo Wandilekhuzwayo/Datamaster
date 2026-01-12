@@ -19,6 +19,6 @@
     unset($_SESSION["lastname"]);
     unset($_SESSION["telephone"]);
     unset($_SESSION["subscription"]);
-    header("Location: http://localhost/Datamaster-User-Side/Dashboard.html"); 
+    header("Location: Dashboard.html"); 
   }
 ?>

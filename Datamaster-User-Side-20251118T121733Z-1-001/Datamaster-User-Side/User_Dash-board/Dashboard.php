@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,27 +14,29 @@
   <!--CSS-->
   <link rel="stylesheet" href="./CSS/dashboard.css" type="text/css">
 </head>
+
 <body>
   <div class="form-container">
     <div class="img">
-      <strong><img src="./Images/Logo.png" alt="Logo" class="responsive"/></strong>
+      <strong><img src="./Images/Logo.png" alt="Logo" class="responsive" /></strong>
     </div>
     <div class="row1-container">
       <div class="box box-down green">
-        <a href="http://localhost/Datamaster-User-Side/Register.html"><img src="./Icons/register.jpeg" alt="Register" class="responsive"/></a>
+        <a href="Register.php"><img src="./Icons/register.jpeg" alt="Register" class="responsive" /></a>
       </div>
       <div class="box box-down yellow">
-        <a href="http://localhost/Datamaster-User-Side/Retrieve.html"><img src="./Icons/retrieve.jpeg" alt="Retrieve" class="responsive"/></a>
+        <a href="Retrieve.php"><img src="./Icons/retrieve.jpeg" alt="Retrieve" class="responsive" /></a>
       </div>
     </div>
     <div class="row2-container">
       <div class="box box-down red">
-        <a href="http://localhost/Datamaster-User-Side/Redeem.html"><img src="./Icons/vacate.jpeg" alt="Vacate" class="responsive"/></a>
+        <a href="Redeem.php"><img src="./Icons/vacate.jpeg" alt="Vacate" class="responsive" /></a>
       </div>
       <div class="box box-down orange">
-        <a href="#"><img src="./Icons/terms.jpeg" alt="Terms" class="responsive"/></a>
+        <a href="#"><img src="./Icons/terms.jpeg" alt="Terms" class="responsive" /></a>
       </div>
     </div>
-  </div> 
+  </div>
 </body>
+
 </html>

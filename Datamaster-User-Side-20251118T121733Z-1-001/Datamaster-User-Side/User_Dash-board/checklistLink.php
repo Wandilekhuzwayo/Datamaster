@@ -38,7 +38,7 @@
 
   if(!empty($personName) && !empty($personSurname) && !empty($personContact) && !empty($reason)) {
     //insert into questions_table into databse
-    $result = mysqli_query($conn, "INSERT INTO `questions_table`(email_phone, person_name, person_surname, person_contact, reason_visit, timein)VALUES('".$emailAddress."', '".$personName."', '".$personSurname."', '".$personContact."', '".$reason."', '".$date."') ");
+    $result = mysqli_query($conn, "INSERT INTO `questions_table`(email_phone, person_name, person_surname, person_contact, reason_visit, timein, status, timeout)VALUES('".$emailAddress."', '".$personName."', '".$personSurname."', '".$personContact."', '".$reason."', '".$date."', 1, '0') ");
 
     if($result) {
       echo ("<script LANGUAGE='JavaScript'>
@@ -49,7 +49,7 @@
         confirmButtonColor: '#3085d6',
           
       }).then(function(){
-        window.location.href='http://localhost/Datamaster-User-Side/TotalExit.php';
+        window.location.href='TotalExit.php';
       });
       </script>");
     }
@@ -64,7 +64,7 @@
       confirmButtonColor: '#3085d6',
 
     }).then(function(){
-      window.location.href='http://localhost/Datamaster-User-Side/Checklist.php';
+      window.location.href='Checklist.php';
     });
     </script>");
   }

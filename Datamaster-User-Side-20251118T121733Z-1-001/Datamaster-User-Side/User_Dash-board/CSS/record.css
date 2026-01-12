@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;900&display=swap');
 
-*, body {
+*,
+body {
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
   font-weight: 400;
@@ -9,7 +10,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-html, body {
+html,
+body {
   min-height: 100vh;
   background: #fff;
   display: flex;
@@ -27,10 +29,10 @@ html, body {
   overflow: hidden;
 }
 
-.form-container .img  img{
+.form-container .img img {
   margin: 0;
-  padding: 0; 
-  max-width:100%; 
+  padding: 0;
+  max-width: 100%;
   height: 145px;
   margin-left: 5rem;
   margin-top: -5%;
@@ -59,14 +61,14 @@ html, body {
   visibility: hidden;
 }
 
-.btn-primary{
+.btn-primary {
   background-color: #3e3e3e;
   color: #fff;
   outline: none;
   border: 0px;
-  border-top-left-radius: 10px; 
+  border-top-left-radius: 10px;
   border-bottom-right-radius: 10px;
-  border-top-right-radius: 10px; 
+  border-top-right-radius: 10px;
   border-bottom-left-radius: 10px;
   box-shadow: none;
   min-width: 90%;
@@ -78,7 +80,9 @@ html, body {
   font-weight: 700;
 }
 
-.btn-primary:hover, .btn-primary:focus, .btn-primary:active{
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
   background-color: #000;
   outline: none !important;
   border: none !important;
@@ -86,12 +90,12 @@ html, body {
   color: #fff
 }
 
-.invalid-feedback{
+.invalid-feedback {
   color: #ff606e;
 }
 
-.valid-feedback{
- color: #2acc80;
+.valid-feedback {
+  color: #2acc80;
 }
 
 .responsive {

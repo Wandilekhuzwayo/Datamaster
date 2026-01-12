@@ -19,7 +19,7 @@
     $_SESSION["telephone"] = $_POST['cnumber'];
     $_SESSION["subscription"] = $_POST['subscribe'];
 
-    header("Location: http://localhost/Datamaster-User-Side/Record.html");
+    header("Location: Record.php");
     exit();
   }
 ?>

@@ -42,7 +42,7 @@
         confirmButtonColor: '#3085d6',
           
       }).then(function(){
-        window.location.href='http://localhost/Datamaster-User-Side/Progress.php?retrievedEmail=$email';
+        window.location.href='Progress.php?retrievedEmail=$email';
       });
       </script>");
     }
@@ -55,7 +55,7 @@
         confirmButtonColor: '#3085d6',
 
       }).then(function(){
-        window.location.href='http://localhost/Datamaster-User-Side/Retrieve.html';
+        window.location.href='Retrieve.php';
       });
       </script>");
     }

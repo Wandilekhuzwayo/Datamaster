@@ -41,7 +41,7 @@
         confirmButtonColor: '#3085d6',
           
       }).then(function(){
-        window.location.href='http://localhost/Datamaster-User-Side/TotalExit.php';
+        window.location.href='TotalExit.php';
       });
       </script>");
     }
@@ -54,7 +54,7 @@
         confirmButtonColor: '#3085d6',
 
       }).then(function(){
-        window.location.href='http://localhost/Datamaste-User-Side/Vacate.php';
+        window.location.href='Vacate.php';
       });
       </script>");
     }
