@@ -15,7 +15,7 @@
   error_reporting(E_ERROR | E_PARSE);
 
   //Create a Query
-  $result = mysqli_query($conn, "SELECT image, fname, lname, mnum, cname, email, address, country, province, city, code FROM `user_table` WHERE mnum LIKE '%{$emailAddress}%' OR email LIKE '%{$emailAddress}%'");
+  $result = mysqli_query($conn, "SELECT image, fname, lname, mnum, cname, email, address, country, province, city, code FROM `user_table` WHERE mnum LIKE '%{$emailAddress}%' OR email LIKE '%{$emailAddress}%' LIMIT 1");
 
   if($result) {
     //Get a data from user_table row

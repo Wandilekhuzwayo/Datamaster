@@ -27,9 +27,9 @@
   //Get the session 
   $firstname = $_SESSION["firstname"];
   $lastname = $_SESSION["surname"];
-  $phone = $_SESSION["mobile"];
+  $phone = trim($_SESSION["mobile"]);
   $company = $_SESSION["organization"];
-  $email = $_SESSION["emailAddress"];
+  $email = trim($_SESSION["emailAddress"]);
   $address = $_SESSION["homeAddress"];
   $country = $_SESSION["nation"];
   $state = $_SESSION["province"];
