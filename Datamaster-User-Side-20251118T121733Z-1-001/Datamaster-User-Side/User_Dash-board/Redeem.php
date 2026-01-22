@@ -1,3 +1,7 @@
+<?php
+require_once('session_config.php');
+require_once('csrf.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +24,7 @@
   </div>
   <div class="title">RETRIEVE AND VACATE</div>
   <form action="redeemLink.php" method="post" autocomplete="off" enctype="multipart/form-data" class="requires-validation" novalidate>
+      <?php csrf_field(); ?>
       <div class="d-flex">
           <div class="form-group">
               <select id="select" onchange="selectChange(this.value)" class="form-select mt-3" style="width: 200px;" name="option" required>

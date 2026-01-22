@@ -15,45 +15,67 @@
 </html>
 
 <?php 
-  //Start the Session
-  session_start();
+  // Include security helpers
+  require_once('session_config.php');
+  require_once('validation.php');
+  require_once('csrf.php');
 
-  //Start the connection
+  // Get the connection
   include('connection.php');
 
-  //Take value from html form
-  $email = $_POST['search'];
-  $type = $_POST['comType'];
+  // Sanitize input
+  $email = sanitize_string($_POST['search'] ?? '');
+  $type = sanitize_string($_POST['comType'] ?? '');
 
   if(isset($_POST['proceed'])) {
+    
+    // Validate CSRF token
+    validate_csrf();
+    
+    // Validate input is not empty
+    if (empty($email)) {
+      echo("<script LANGUAGE='JavaScript'>
+      Swal.fire({
+        icon: 'error',
+        text: 'Please enter an email or phone number!',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#3085d6',
+      }).then(function(){
+        window.location.href='Retrieve.php';
+      });
+      </script>");
+      exit;
+    }
+    
+    // Search using prepared statement with LIKE
+    $searchTerm = '%' . $email . '%';
+    $stmt = $conn->prepare("SELECT mnum, email FROM `user_table` WHERE mnum LIKE ? OR email LIKE ?");
+    $stmt->bind_param("ss", $searchTerm, $searchTerm);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $rows = $result->num_rows;
+    $stmt->close();
         
-    //Get mobile or email from database
-    $query = mysqli_query($conn, "SELECT mnum, email FROM `user_table` WHERE mnum LIKE '%{$email}%' OR email LIKE '%{$email}%'");
-
-    $rows = mysqli_num_rows($query);
-        
-    //final execution
-    if($rows){
+    if($rows > 0) {
+      // URL encode the email for safe transmission
+      $safeEmail = urlencode($email);
       echo ("<script LANGUAGE='JavaScript'>
       Swal.fire({
         icon: 'success',
         text: 'This Info Corresponds',
         confirmButtonText: 'OK',
         confirmButtonColor: '#3085d6',
-          
       }).then(function(){
-        window.location.href='Progress.php?retrievedEmail=$email';
+        window.location.href='Progress.php?retrievedEmail=$safeEmail';
       });
       </script>");
-    }
-    else {
+    } else {
       echo("<script LANGUAGE='JavaScript'>
       Swal.fire({
         icon: 'error',
         text: 'This Info Provided Is Wrong!',
         confirmButtonText: 'OK',
         confirmButtonColor: '#3085d6',
-
       }).then(function(){
         window.location.href='Retrieve.php';
       });

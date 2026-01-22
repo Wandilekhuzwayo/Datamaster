@@ -15,45 +15,66 @@
 </html>
 
 <?php 
-  //Start the session
-  session_start();
+  // Include security helpers
+  require_once('session_config.php');
+  require_once('validation.php');
+  require_once('csrf.php');
 
-  //Get the connection
+  // Get the connection
   include('connection.php');
 
-  //Get values from html
-  $email = $_POST['search'];
-  $option = $_POST['option'];
+  // Sanitize input
+  $email = sanitize_string($_POST['search'] ?? '');
+  $option = sanitize_string($_POST['option'] ?? '');
 
   if(isset($_POST['vacate'])) {
+    
+    // Validate CSRF token
+    validate_csrf();
+    
+    // Validate input
+    if (empty($email)) {
+      echo("<script LANGUAGE='JavaScript'>
+      Swal.fire({
+        icon: 'error',
+        text: 'Please enter an email or phone number!',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#3085d6',
+      }).then(function(){
+        window.location.href='Redeem.php';
+      });
+      </script>");
+      exit;
+    }
 
-    //Get mobile or email from database
-    $query = mysqli_query($conn, "SELECT mnum, email FROM `user_table` WHERE mnum LIKE '%{$email}%' OR email LIKE '%{$email}%'");
+    // Search using prepared statement
+    $searchTerm = '%' . $email . '%';
+    $stmt = $conn->prepare("SELECT mnum, email FROM `user_table` WHERE mnum LIKE ? OR email LIKE ?");
+    $stmt->bind_param("ss", $searchTerm, $searchTerm);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $rows = $result->num_rows;
+    $stmt->close();
 
-    $rows = mysqli_num_rows($query);
-
-    //final execution
-    if($rows){
+    if($rows > 0) {
+      $safeEmail = urlencode($email);
       echo ("<script LANGUAGE='JavaScript'>
       Swal.fire({
         icon: 'success',
         text: 'This Info Corresponds',
         confirmButtonText: 'OK',
         confirmButtonColor: '#3085d6',
-          
       }).then(function(){
-        window.location.href='Vacate.php?redeemedData=$email';
+        window.location.href='Vacate.php?redeemedData=$safeEmail';
       });
       </script>");
-    }
-    else {
+    } else {
       echo("<script LANGUAGE='JavaScript'>
       Swal.fire({
         icon: 'error',
         text: 'This Info Provided Is Wrong!',
         confirmButtonText: 'OK',
         confirmButtonColor: '#3085d6',
-
       }).then(function(){
         window.location.href='Redeem.php';
       });

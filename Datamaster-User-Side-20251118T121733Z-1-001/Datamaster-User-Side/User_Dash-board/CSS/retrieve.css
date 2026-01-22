@@ -14,7 +14,10 @@ html,
 body {
   min-height: 100vh;
   background-color: #fff;
-  overflow: none;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .form-container {

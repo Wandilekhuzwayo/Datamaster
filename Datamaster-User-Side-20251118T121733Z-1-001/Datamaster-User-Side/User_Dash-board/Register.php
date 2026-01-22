@@ -1,3 +1,7 @@
+<?php
+require_once('session_config.php');
+require_once('csrf.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,11 +26,13 @@
                     <br/>
                     <p>PROVIDE THE REQUIRED PERSONAL DETAILS BELOW</p>
                     <form action="registerLink.php" method="post" autocomplete="off" class="requires-validation" novalidate>
+                        <?php csrf_field(); ?>
 
                         <div class="col-md-12">
                            <input class="form-control" type="text" name="name" placeholder="First Name" required>
                            <div class="invalid-feedback">This field cannot be blank!</div>
                         </div>
+
 
                         <div class="col-md-12">
                             <input class="form-control" type="text" name="surname" placeholder="Last Name" required>

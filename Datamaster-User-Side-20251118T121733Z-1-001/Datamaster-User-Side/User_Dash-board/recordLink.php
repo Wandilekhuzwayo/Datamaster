@@ -15,93 +15,118 @@
 </html>
 
 <?php
-  //Start the session
-  session_start();
+  // Include security helpers
+  require_once('session_config.php');
+  require_once('validation.php');
+  require_once('csrf.php');
   
-  //Default timezone
+  // Default timezone
   date_default_timezone_set('Africa/Johannesburg');
   
-  //Call the connection
+  // Call the connection
   include('connection.php');
 
-  //Get the session 
-  $firstname = $_SESSION["firstname"];
-  $lastname = $_SESSION["surname"];
-  $phone = trim($_SESSION["mobile"]);
-  $company = $_SESSION["organization"];
-  $email = trim($_SESSION["emailAddress"]);
-  $address = $_SESSION["homeAddress"];
-  $country = $_SESSION["nation"];
-  $state = $_SESSION["province"];
-  $city = $_SESSION["town"];
-  $code = $_SESSION["postalCode"];
-  $name = $_SESSION["firstName"];
-  $surname = $_SESSION["lastname"];
-  $contact = $_SESSION["telephone"];
-  $subscription = $_SESSION["subscription"];
+  // Get the session data with sanitization
+  $firstname = sanitize_string($_SESSION["firstname"] ?? '');
+  $lastname = sanitize_string($_SESSION["surname"] ?? '');
+  $phone = sanitize_string($_SESSION["mobile"] ?? '');
+  $company = sanitize_string($_SESSION["organization"] ?? '');
+  $email = sanitize_string($_SESSION["emailAddress"] ?? '');
+  $address = sanitize_string($_SESSION["homeAddress"] ?? '');
+  $country = sanitize_string($_SESSION["nation"] ?? '');
+  $state = sanitize_string($_SESSION["province"] ?? '');
+  $city = sanitize_string($_SESSION["town"] ?? '');
+  $code = sanitize_string($_SESSION["postalCode"] ?? '');
+  $name = sanitize_string($_SESSION["firstName"] ?? '');
+  $surname = sanitize_string($_SESSION["lastname"] ?? '');
+  $contact = sanitize_string($_SESSION["telephone"] ?? '');
+  $subscription = sanitize_string($_SESSION["subscription"] ?? '');
   $date = date("Y/m/d H:i:sa");
 
-  //Hide warnings
-  error_reporting(E_ERROR | E_PARSE);
-
-  //Store image to folder
-  $tmpName = $_FILES["webcam"]["tmp_name"];
-  $imageName = date("Y.m.d"). " - ". date("h.i.sa") . ' .jpeg';
-  move_uploaded_file($tmpName, './img_Users/' . $imageName);
+  // Log errors instead of hiding them
+  error_reporting(E_ALL);
+  ini_set('log_errors', 1);
+  ini_set('display_errors', 0);
 
   if(isset($_POST['insert'])) {
+    
+    // Validate CSRF token
+    validate_csrf();
+    
+    // Validate and process image upload securely
+    $imageName = '';
+    if (isset($_FILES["webcam"]) && $_FILES["webcam"]["error"] === UPLOAD_ERR_OK) {
+      $validation = validate_image_upload($_FILES["webcam"]);
+      
+      if (!$validation['valid']) {
+        echo ("<script LANGUAGE='JavaScript'>
+        Swal.fire({
+          icon: 'error',
+          text: '" . addslashes($validation['error']) . "',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#3085d6', 
+        }).then(function(){
+          window.location.href='Record.php';
+        });
+        </script>");
+        exit;
+      }
+      
+      // Generate secure filename
+      $imageName = generate_secure_filename('jpeg');
+      move_uploaded_file($_FILES["webcam"]["tmp_name"], './img_Users/' . $imageName);
+    }
+    
+    // Check for duplicate user using prepared statement
+    $checkStmt = $conn->prepare("SELECT id FROM `user_table` WHERE email = ? OR mnum = ?");
+    $checkStmt->bind_param("ss", $email, $phone);
+    $checkStmt->execute();
+    $checkResult = $checkStmt->get_result();
 
-  //Insert into user table
-  $query = "INSERT INTO `user_table`(date, image, fname, lname, mnum, cname, email, address, country, province, city, code, name, surname, contact, subscription)VALUES('$date', '".$imageName."', '".$firstname."', '".$lastname."', '".$phone."', '".$company."', '".$email."', '".$address."', '".$country."', '".$state."', '".$city."', '".$code."', '".$name."', '".$surname."', '".$contact."', '".$subscription."')";
-
-  //Check for duplicate user
-  $checkQuery = "SELECT * FROM `user_table` WHERE email = '$email' OR mnum = '$phone'";
-  $checkResult = mysqli_query($conn, $checkQuery);
-
-  if (mysqli_num_rows($checkResult) > 0) {
-    echo ("<script LANGUAGE='JavaScript'>
-    Swal.fire({
-      icon: 'error',
-      text: 'User with this email or phone number already exists!',
-      confirmButtonText: 'OK',
-      confirmButtonColor: '#3085d6', 
-          
-    }).then(function(){
-      window.location.href='Register.html';
-    });
-    </script>");
-  } else {
-    //Execution
-    $result = mysqli_query($conn, $query);
-
-  if($result){
-    echo ("<script LANGUAGE='JavaScript'>
-    Swal.fire({
-      icon: 'success',
-      text: 'User Details Inserted Successfully.',
-      confirmButtonText: 'OK',
-      confirmButtonColor: '#3085d6',
-          
-    }).then(function(){
-      window.location.href='Retrieve.html';
-    });
-    </script>");
+    if ($checkResult->num_rows > 0) {
+      $checkStmt->close();
+      echo ("<script LANGUAGE='JavaScript'>
+      Swal.fire({
+        icon: 'error',
+        text: 'User with this email or phone number already exists!',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#3085d6', 
+      }).then(function(){
+        window.location.href='Register.php';
+      });
+      </script>");
+    } else {
+      $checkStmt->close();
+      
+      // Insert using prepared statement
+      $insertStmt = $conn->prepare("INSERT INTO `user_table` (date, image, fname, lname, mnum, cname, email, address, country, province, city, code, name, surname, contact, subscription) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+      $insertStmt->bind_param("ssssssssssssssss", $date, $imageName, $firstname, $lastname, $phone, $company, $email, $address, $country, $state, $city, $code, $name, $surname, $contact, $subscription);
+      
+      if($insertStmt->execute()) {
+        $insertStmt->close();
+        echo ("<script LANGUAGE='JavaScript'>
+        Swal.fire({
+          icon: 'success',
+          text: 'User Details Inserted Successfully.',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#3085d6',
+        }).then(function(){
+          window.location.href='Retrieve.php';
+        });
+        </script>");
+      } else {
+        $insertStmt->close();
+        echo ("<script LANGUAGE='JavaScript'>
+        Swal.fire({
+          icon: 'error',
+          text: 'User Details Inserted Unsuccessfully.',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#3085d6', 
+        }).then(function(){
+          window.location.href='Record.php';
+        });
+        </script>");
+      }
+    }
   }
-  else {
-    echo ("<script LANGUAGE='JavaScript'>
-    Swal.fire({
-      icon: 'error',
-      text: 'User Details Inserted Unsuccessfully.',
-      confirmButtonText: 'OK',
-      confirmButtonColor: '#3085d6', 
-          
-    }).then(function(){
-      window.location.href='Record.html';
-    });
-    </script>");
-  }
-  }
-}
-
-
 ?>

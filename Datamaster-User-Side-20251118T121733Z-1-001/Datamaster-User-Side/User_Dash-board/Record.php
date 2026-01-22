@@ -1,3 +1,7 @@
+<?php
+require_once('session_config.php');
+require_once('csrf.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +23,7 @@
   </div>
   <div class="title">CAPTURE AND SECURE</div>
   <form action="recordLink.php" method="POST" autocomplete="off" enctype="multipart/form-data" class="requires-validation" novalidate>
+    <?php csrf_field(); ?>
     <div class="row">
       <div class="col-md-12">
         <div class="input-group date" id="datePicker">

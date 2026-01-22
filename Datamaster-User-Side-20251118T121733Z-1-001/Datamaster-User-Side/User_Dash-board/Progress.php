@@ -1,48 +1,35 @@
 <?php
-  //Start the session
-  session_start();
+  // Include security helpers
+  require_once('session_config.php');
+  require_once('validation.php');
 
-  //Get the connection
+  // Get the connection
   include('connection.php');
 
-  //Call Unique variable from retrieve page
-  $email = $_GET['retrievedEmail'];
-
-  //Create a query
-  $result = mysqli_query($conn, "SELECT image, fname, lname FROM `user_table` WHERE mnum LIKE '%{$email}%' OR email LIKE '%{$email}%' LIMIT 1");
-
-  if($result) {
-    //Get data from table user_table row
-    while($row = mysqli_fetch_assoc($result)) {
-      $name = $row['fname'];
-      $surname = $row['lname'];
-      
-      echo'<div class="form-container">
-      <div class="img">
-        <strong><img src="./Images/Logo.png" alt="Logo" class="responsive"/></strong>
-    </div>
-    <div class="title">DISPLAY AND PROGRESS</div>
-    <form action="" enctype="multipart/form-data">
-        <div class="float-items">
-            <div class="person-img">
-              <img src="img_Users/'.$row['image'].'" alt="Person" class="reponsive" 
-              style=" 
-              display: inline-block;
-              height: 280px;
-              width: 280px;
-              border-top-left-radius: 12px;
-              border-bottom-right-radius: 12px;
-              border-top-right-radius: 12px;
-              border-bottom-left-radius: 12px;
-              margin-left: 1.0px;
-              "/>
-            </div>
-            <div class="name-lbl">
-              <label name="name">'.$name.' '.$surname.'</label>
-            </div>
-        </div>';
-    }
+  // Sanitize input
+  $email = sanitize_string($_GET['retrievedEmail'] ?? '');
+  
+  // Validate input exists
+  if (empty($email)) {
+    header('Location: Retrieve.php');
+    exit;
   }
+
+  // Use prepared statement for query
+  $searchTerm = '%' . $email . '%';
+  $stmt = $conn->prepare("SELECT image, fname, lname FROM `user_table` WHERE mnum LIKE ? OR email LIKE ? LIMIT 1");
+  $stmt->bind_param("ss", $searchTerm, $searchTerm);
+  $stmt->execute();
+  $result = $stmt->get_result();
+
+  $userData = null;
+  if($result && $result->num_rows > 0) {
+    $userData = $result->fetch_assoc();
+  }
+  $stmt->close();
+  
+  // URL encode email for safe use in links
+  $safeEmail = htmlspecialchars(urlencode($email), ENT_QUOTES, 'UTF-8');
 ?>
 
 <!DOCTYPE html>
@@ -63,37 +50,58 @@
  
 </head>
 <body>
-  
+  <?php if ($userData): ?>
+  <div class="form-container">
+    <div class="img">
+      <strong><img src="./Images/Logo.png" alt="Logo" class="responsive"/></strong>
+    </div>
+    <div class="title">DISPLAY AND PROGRESS</div>
+    <form action="" enctype="multipart/form-data">
+      <div class="float-items">
+        <div class="person-img">
+          <img src="img_Users/<?php echo htmlspecialchars($userData['image'], ENT_QUOTES, 'UTF-8'); ?>" alt="Person" class="responsive" 
+          style=" 
+          display: inline-block;
+          height: 280px;
+          width: 280px;
+          border-top-left-radius: 12px;
+          border-bottom-right-radius: 12px;
+          border-top-right-radius: 12px;
+          border-bottom-left-radius: 12px;
+          margin-left: 1.0px;
+          "/>
+        </div>
+        <div class="name-lbl">
+          <label name="name"><?php echo htmlspecialchars($userData['fname'] . ' ' . $userData['lname'], ENT_QUOTES, 'UTF-8'); ?></label>
+        </div>
+      </div>
       <div class="form-button mt-3">
         <button type="button" class="btn btn-primary" onclick="goChecklists()">Proceed To Visitors Checklist</button>
       </div>
-      </form>
+    </form>
   </div>
-  <script LANGUAGE="javascript">
+  <?php else: ?>
+  <div class="form-container">
+    <div class="img">
+      <strong><img src="./Images/Logo.png" alt="Logo" class="responsive"/></strong>
+    </div>
+    <div class="title">User Not Found</div>
+    <p>The user could not be found. Please try again.</p>
+    <a href="Retrieve.php" class="btn btn-primary">Go Back</a>
+  </div>
+  <?php endif; ?>
+  
+  <script>
     function goChecklists() {
-      <?php 
-        //Again access variable
-        $emailAddress = $_GET['retrievedEmail'];
-        
-      ?>
-
-    Swal.fire({
+      Swal.fire({
         icon: 'success',
         text: 'Thank you for providing corresponding details. Please continue to checklist',
         confirmButtonText: 'OK',
         confirmButtonColor: '#3085d6',
-          
       }).then(function(){
-        <?php
-          //Again access variable
-          $emailAddress = $_GET['retrievedEmail'];
-
-          echo "window.location.href='Checklist.php?progressedEmail=$emailAddress'";
-        ?>
-
+        window.location.href = 'Checklist.php?progressedEmail=<?php echo $safeEmail; ?>';
       });
     }
   </script>
 </body>
- 
 </html>

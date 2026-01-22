@@ -1,3 +1,7 @@
+<?php
+require_once('session_config.php');
+require_once('csrf.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +14,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <!--CSS-->
-  <link rel="stylesheet" href="./CSS/retrieve.css" type="text/css">
+  <link rel="stylesheet" href="./CSS/retrieve.css?v=<?php echo time(); ?>" type="text/css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
@@ -20,6 +24,7 @@
   </div>
   <div class="title">RETRIEVE AND PROCEED</div>
   <form action="retrieveLink.php" method="post" autocomplete="off" enctype="multipart/form-data" class="requires-validation" novalidate>
+      <?php csrf_field(); ?>
       <div class="d-flex">
           <div class="form-group">
               <select id="select" onchange="selectChange(this.value)" class="form-select mt-3" name="comType" style="width: 200px;" required>
