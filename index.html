@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataMaster - Record, Secure, Retrieve</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            padding: 40px 20px;
+        }
+
+        .logo-container {
+            margin-bottom: 60px;
+        }
+
+        .logo-container img {
+            max-width: 400px;
+            width: 100%;
+            height: auto;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 80px;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #5b7fc7 0%, #4a6bb5 100%);
+            color: white;
+            padding: 20px 80px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(91, 127, 199, 0.3);
+            min-width: 200px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(91, 127, 199, 0.4);
+            background: linear-gradient(135deg, #6a8dd4 0%, #5b7fc7 100%);
+        }
+
+        .nav-button:active {
+            transform: translateY(-1px);
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-button {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .logo-container img {
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="assets/Logo.png" alt="DataMaster - Record, Secure, Retrieve">
+        </div>
+        
+        <div class="button-container">
+            <a href="Datamaster-User-Side-20251118T121733Z-1-001/Admin_Dash-board/Admin_Dash-board/pages/signin.html" class="nav-button">Admin</a>
+            <a href="Datamaster-User-Side-20251118T121733Z-1-001/Datamaster-User-Side/User_Dash-board/Dashboard.php" class="nav-button">Visitor</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        (Privacy Policy, Terms & Conditions)
+    </div>
+</body>
+</html>
