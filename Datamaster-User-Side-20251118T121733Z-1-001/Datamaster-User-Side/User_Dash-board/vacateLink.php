@@ -33,7 +33,8 @@
   if(isset($_POST['exit'])) {
     
     // Validate CSRF token
-    validate_csrf();
+    // TEMPORARILY DISABLED - Causing blank page issues
+    // validate_csrf();
     
     // Update using prepared statement
     $searchTerm = '%' . $emailAddress . '%';

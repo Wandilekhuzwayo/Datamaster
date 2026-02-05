@@ -9,7 +9,7 @@
   include('connection.php');
 
   //Get a unique variable from redeem page
-  $emailAddress = $_GET['redeemedData'];
+  $emailAddress = $_GET['redeemedData'] ?? '';
 
   //Create a query
   $result = mysqli_query($conn, "SELECT image, fname, lname FROM `user_table` WHERE mnum LIKE '%{$emailAddress}%' OR email LIKE '%{$emailAddress}%'");

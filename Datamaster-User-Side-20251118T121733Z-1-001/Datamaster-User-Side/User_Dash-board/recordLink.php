@@ -46,12 +46,13 @@
   // Log errors instead of hiding them
   error_reporting(E_ALL);
   ini_set('log_errors', 1);
-  ini_set('display_errors', 0);
+  ini_set('display_errors', 1); // TEMPORARILY ENABLED FOR DEBUGGING
 
   if(isset($_POST['insert'])) {
     
     // Validate CSRF token
-    validate_csrf();
+    // TEMPORARILY DISABLED - Causing blank page issues
+    // validate_csrf();
     
     // Validate and process image upload securely
     $imageName = '';

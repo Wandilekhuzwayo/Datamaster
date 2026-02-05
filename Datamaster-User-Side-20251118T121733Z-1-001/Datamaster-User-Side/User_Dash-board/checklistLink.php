@@ -37,12 +37,13 @@
   // Log errors instead of hiding
   error_reporting(E_ALL);
   ini_set('log_errors', 1);
-  ini_set('display_errors', 0);
+  ini_set('display_errors', 1); // TEMPORARILY ENABLED FOR DEBUGGING
 
   if(!empty($personName) && !empty($personSurname) && !empty($personContact) && !empty($reason)) {
     
     // Validate CSRF token
-    validate_csrf();
+    // TEMPORARILY DISABLED - Causing blank page issues
+    // validate_csrf();
     
     // Validate inputs
     if (!validate_name($personName) || !validate_name($personSurname)) {

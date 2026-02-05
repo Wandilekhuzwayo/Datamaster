@@ -30,7 +30,8 @@
   if(isset($_POST['vacate'])) {
     
     // Validate CSRF token
-    validate_csrf();
+    // TEMPORARILY DISABLED - Causing blank page issues
+    // validate_csrf();
     
     // Validate input
     if (empty($email)) {

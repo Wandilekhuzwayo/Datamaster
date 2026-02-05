@@ -40,7 +40,7 @@ require_once('csrf.php');
     </div>
     <div class="row">
       <div class="form-button mt-3">
-        <button type="submit" class="btn btn-primary" name="insert" onclick="snap_img()">REGISTER</button>
+        <button type="button" class="btn btn-primary" name="insert" onclick="snap_img()">REGISTER</button>
       </div>
     </div>
   </form>
@@ -67,7 +67,11 @@ require_once('csrf.php');
       
       var base64image = document.getElementById("webcam").src;
       
-      Webcam.upload(base64image, 'recordLink.php', function(code, text){});
+      // Upload image and submit form on success
+      Webcam.upload(base64image, 'recordLink.php', function(code, text){
+        // After successful upload, submit the form
+        document.querySelector('form').submit();
+      });
     }
   </script>
 </body>
