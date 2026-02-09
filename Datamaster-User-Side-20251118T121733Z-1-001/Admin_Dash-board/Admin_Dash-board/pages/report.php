@@ -8,11 +8,11 @@
   //Select query
   if(isset($_POST['search-info'])){
     $searchValue = $_POST['search'];
-    $query = "SELECT id, fname, lname, mnum, contact, email FROM `user_table` WHERE CONCAT(`fname`, `lname`, `mnum`, `contact`, `email`) LIKE '%".$searchValue."%'";
+    $query = "SELECT id, email_phone, person_name, person_surname, person_contact, timein, timeout FROM `questions_table` WHERE CONCAT(`email_phone`, `person_name`, `person_surname`, `person_contact`, `timein`, `timeout`) LIKE '%".$searchValue."%'";
     $result = filterTable($query);
   }
   else {
-    $query = "SELECT id, fname, lname, mnum, contact, email FROM `user_table`";
+    $query = "SELECT id, email_phone, person_name, person_surname, person_contact, timein, timeout FROM `questions_table`";
     $result = filterTable($query);
   }
 
@@ -25,6 +25,7 @@
 
     return $result;
   }
+
 ?>
 
 <!doctype html>
@@ -34,13 +35,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-        <title>Datamaster Registered Visitors
+        <title>Datamaster Reporting
 		</title>
 	    <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
         <link rel="stylesheet" href="../css/bootstrap.min.css">
-
-	    <!----css3---->
+	    
+        <!----css3---->
         <link rel="stylesheet" href="../css/custom.css">
         <link rel="stylesheet" href="../css/styles.css">
         <link rel="stylesheet" href="../css/styling.css">
@@ -57,6 +58,16 @@
       rel="stylesheet">
       <link rel="stylesheet" href="../css/admi.css">
       <script src="https://kit.fontawesome.com/83f97129c2.js" crossorigin="anonymous"></script>
+
+      <script type="text/javascript">
+    function goToNewPage()
+    {
+        var url = document.getElementById('list').value;
+        if(url != 'none') {
+            window.location = url;
+        }
+    }
+</script>
   </head>
   <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
@@ -85,7 +96,7 @@
                 <i class="bi bi-people material-icons"></i><span>Manage Users</span></a>
                 <ul class="collapse list-unstyled menu" id="homeSubmenu1">
                     <li>
-                        <a href="../pages/add_user.php"><i class="bi bi-person-plus material-icons"></i><span>Add Users</span></a>
+                        <a href="../pages/add_user.php"><i class="bi bi-person-plus material-icons"></i><span>Add User</span></a>
                     </li>
                     <li>
                         <a href="../pages/viewUsers.php"><i class="bi bi-person-workspace material-icons"></i> <span>View Users</span></a>
@@ -118,12 +129,15 @@
         <li>
             <a href="../pages/report.php"><i class="bi bi-calendar material-icons" class="dashboard"></i><span>Time Interval Reports</span></a>
         </li>
+
         <li>
                 <a href="../pages/customReporting.php"><i class="bi bi-file-bar-graph material-icons"></i><span>Custom Report</span></a>
                 </li>
+
     </ul>
     </li>
 
+    
             
     <li>
         <a href="../php/signout.php"><i class="bi bi-box-arrow-left material-icons"></i><span>Sign Out</span></a>
@@ -197,108 +211,45 @@
         </nav>
     </div>
         
-        <div class="main-content">
-            <div class="d-sm-flex align-items-center justify-content-between mb-3">
-                <h1 class="h3 mb-0 ">Registered Visitors</h1>
-                <!--Do A form here please-->
-                <form action="visitorContact.php" method="POST">
-                <input type="text" class="control-search" name="search" placeholder="Search Here"/>
-                <button type="submit" class="btn btn-primary" name="search-info"><i class="fa fa-search" aria-hidden="true"></i></button>
+    <div class="main-content">
+    <form id="reportForm">
+    <label for="Intervals">Choose Time Interval:</label>
+    <select name="list" id="list">
+        <option value="" selected>Choose time interval</option>
+        <option value="reportYearly.php">Yearly</option>
+        <option value="reportMonthly.php">Monthly</option>
+        <option value="reportWeekly.php">Weekly</option>
+        <option value="reportDaily.php">Daily</option>
+    </select>
 
-            </div>
+    <label for="viewSelect">Select View:</label>
+    <select name="view" id="view">
+        <option value="graph">Graph</option>
+        <option value="table">Table</option>
+    </select>
 
-            <!-- Modal HTML -->
-            <div class="container-fluid ng-scope">
-              <div class="row">
-                 <div class="col-lg-12">
-                    <div class="panel panel-default">
-                       <div class="panel-heading">
-                       </div>
-                       <div class="panel-body">
-                          <div class="">
-                             <table  class="table table-striped ng-scope ng-table table-hover">
-                                <thead style="background-color: #3e3e3e;">
-                                <tr>
+    <input type="button" name="search-year" class="btn btn-primary" value="Select" id="selectButton">
+</form>
 
-                                    <th style="width:5%">
-                                        No.        
-                                    </th> 
+<script>
+document.getElementById("selectButton").addEventListener("click", function() {
+    var selectedOption = document.getElementById("list").value;
+    if (selectedOption) {
+        window.location.href = selectedOption;
+    }
+});
+</script>
 
-                                    <th>
-                                        Name        
-                                    </th>
+        <div class="display  d-flex justify-content-center ">
+          <img class=bl src="../images/icon66.png">  <h1 ><b>Visitor Report<b></h1>
 
-                                    <th>
-                                        Surname    
-                                    </th> 
-                                    
-                                    <th>
-                                        Phone       
-                                    </th> 
-                                    
-                                    <th>
-                                        Alt. Phone    
-                                    </th> 
-                                    
-                                    <th>
-                                        Email   
-                                    </th> 
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php while($data = mysqli_fetch_array($result)):?>
-                                   <tr>
-                                      <td>
-                                        <?php echo $data['id']; ?>
-                                      </td> <td>
-                                        <?php echo $data['fname']; ?>
-                                      </td> <td>
-                                        <?php echo $data['lname']; ?>
-                                      </td> <td>
-                                        <?php echo $data['mnum']; ?>
-                                      </td> <td>
-                                        <?php echo $data['contact']; ?>
-                                      </td> <td>
-                                        <?php echo $data['email']; ?>
-                                      </td> 
-                                   </tr>
-                                   <?php endwhile;?>  
-                              </tbody>
-                             </table><div  class="ng-scope"> <div   class="ng-scope"> </div></div>
-                          </div>
-                           
-                       </div>
-                       </form>
-                       <div class="panel-footer">
-                          <div   type="'excel'"  class="ng-isolate-scope"><a class="ng-excel"><span></span></a></div>
-                          <a href="../php/downloadContact.php" name="pdfDownload" id="pdfDownload" style="margin-left: 7px"   class="btn btn-success ng-binding">Download PDF</a>
-                          <a href="../php/downloadContactXl.php" name="xlsDownload" id="xlsDownload" style="margin-left: 7px"   class="btn btn-success ng-binding">Download XLS</a>   
-                       </div>
-                    </div>
-                 </div>
-              </div>
-           </div>
+         <!---   <img src="../images/Site-Stats.gif" --->
+            
 
 
-            <!--<div class="row">
-                <div class="col-xl-8 col-lg-7">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-secondary">Daily Visitors count</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="chart-area">
-                                <canvas id="myAreaChart"></canvas>
-                            </div>
+         </div>
 
-                        </div>
-                    </div> 
-
-                </div>
-            </div>--> 
-        </div>
-                
-        <div class="footer" style="position: fixed; bottom: 0; padding: 1px; margin: auto; ">
+         <div class="footer" style="position: fixed; bottom: 0; padding: 1px; margin: auto; ">
                 <div class="container-fluid">
                 <footer class="py-3 my-4">
                <div class="row">
@@ -316,7 +267,6 @@
     <!-- Second modal dialog -->
 </div>
 
-     
     <!-- jQuery for the norifications -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -338,7 +288,7 @@
    <script src="../js/popper.min.js"></script>
    <script src="../js/bootstrap.min.js"></script>
    <script src="../js/jquery-3.3.1.min.js"></script>
-   <script src="../js/barchart.js"></script>
+   <script src="../js/barchartYearly.js"></script>
   
   <script type="text/javascript">
   $(document).ready(function () {

@@ -6,18 +6,16 @@ include("../php/auth_session.php");
 include('../php/connection.php');
 
 // Select query
- if(isset($_POST['search-info'])){
-    $searchValue = $_POST['search'];
-    $query = "SELECT id, email_phone, person_name, person_surname, person_contact, timein, timeout FROM `questions_table` WHERE CONCAT(`email_phone`, `person_name`, `person_surname`, `person_contact`, `timein`, `timeout`) LIKE '%".$searchValue."%'";
-    $result = filterTable($query);
-  }
-  else {
-    $query = "SELECT id, email_phone, person_name, person_surname, person_contact, timein, timeout
-    FROM questions_table
-    WHERE timeout = '';
-    ";
-    $result = filterTable($query);
-  }
+if(isset($_POST['search-info'])){
+  $searchValue = $_POST['search'];
+  $query = "SELECT fname, lname, mnum, email, email_phone, timein FROM `user_table` AS u INNER JOIN `questions_table` AS q ON u.email = q.email_phone 
+  WHERE CONCAT(`fname`, `lname`, `mnum`, `email`, `email_phone`, `timein`) LIKE '%".$searchValue."%'";
+  $result = filterTable($query);
+}
+else {
+  $query = "SELECT id, firstname, surname, email, employeeNo, companyname, department FROM admin_table";
+  $result = filterTable($query);
+}
 
 function filterTable($query) {
   // Get Connection
@@ -51,9 +49,6 @@ function filterTable($query) {
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="../css/admi.css">
     <script src="https://kit.fontawesome.com/83f97129c2.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script> 
 </head>
 <body>
     <div class="wrapper" style="min-height: 50em;">
@@ -61,7 +56,8 @@ function filterTable($query) {
         <nav id="sidebar">
         <div class="sidebar-header">
             <h3><img src="../images/Logo Icon.png" alt="Logo"><span>Datamaster</span></h3>
-        </div>  <ul class="list-unstyled components">
+        </div>
+        <ul class="list-unstyled components">
         <li  class="active">
             <a href="../pages/index.php" class="dashboard"><i class="bi bi-speedometer2 material-icons"></i><span>Dashboard</span></a>
         </li>
@@ -75,10 +71,10 @@ function filterTable($query) {
                 <i class="bi bi-people material-icons"></i><span>Manage Users</span></a>
                 <ul class="collapse list-unstyled menu" id="homeSubmenu1">
                     <li>
-                        <a href="../pages/add_user.php"><i class="bi bi-person-plus material-icons"></i><span>Add Users</span></a>
+                        <a href="../pages/add_clients.php"><i class="bi bi-person-plus material-icons"></i><span>Add Clients</span></a>
                     </li>
                     <li>
-                        <a href="../pages/viewUsers.php"><i class="bi bi-person-workspace material-icons"></i> <span>View Users</span></a>
+                        <a href="../pages/viewUsers.php"><i class="bi bi-person-workspace material-icons"></i> <span>View clients</span></a>
                     </li>
                    
                 </ul>
@@ -108,12 +104,28 @@ function filterTable($query) {
         <li>
             <a href="../pages/report.php"><i class="bi bi-calendar material-icons" class="dashboard"></i><span>Time Interval Reports</span></a>
         </li>
-                <li>
-                <a href="../pages/customReporting.php"><i class="bi bi-file-bar-graph material-icons"></i><span>Custom Report</span></a>
-                </li>
+        <li>
+            <a href="../pages/customReporting.php"><i class="bi bi-file-bar-graph material-icons"></i><span>Custom Report</span></a>
+        </li>
     </ul>
     </li>
 
+    <li class="dropdown">
+            <a href="#homeSubmenu4" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="bi bi-clipboard-check"></i><span>Users</span></a>
+             <ul class="collapse list-unstyled menu" id="homeSubmenu4">
+        <li>
+            <a href="../pages/add_user.php"><i class="bi bi-person-rolodex" class="dashboard"></i><span>Add User</span></a>
+        </li>
+        <li>
+            <a href="../pages/view_Admins.php"><i class="bi bi-card-checklist"></i><span>View Users</span></a>
+        </li>
+    </ul>
+    </li>
+       
+    <!--li  class="">
+                <a href="../pages/add_user.php"><i class="bi bi-person-rolodex"></i><span>Add User</span></a>
+</li-->
             
     <li>
         <a href="../php/signout.php"><i class="bi bi-box-arrow-left material-icons"></i><span>Sign Out</span></a>
@@ -138,7 +150,7 @@ function filterTable($query) {
                                 <li class="dropdown nav-item">
                                     <!-- Query for fetch from the table -->
                                     <?php 
-                                        $sql = "SELECT * FROM `questions_table`  WHERE status='0' AND timeout > 0 ORDER BY id DESC";
+                                        $sql = "SELECT * FROM `admin_table` ORDER BY id DESC";
                                         $res = mysqli_query($conn, $sql); 
                                     ?>
                                     <a href="#" class="nav-link" data-toggle="dropdown" id="notifications">
@@ -176,7 +188,7 @@ function filterTable($query) {
             </div>
             <div class="main-content">
                 <div class="d-sm-flex align-items-center justify-content-between mb-3">
-                    <h1 class="h3 mb-0 ">Active Visitors</h1>
+                    <h1 class="h3 mb-0 ">View Users(Admin`s)</h1>
                     <form action="activeVisitors.php" method="POST">
                         <input type="text" class="control-search" name="search" placeholder="Search Here"/>
                         <button type="submit" class="btn btn-primary" name="search-info"><i class="fa fa-search" aria-hidden="true"></i></button>
@@ -192,15 +204,16 @@ function filterTable($query) {
                                 </div>
                                 <div class="panel-body">
                                     <div class="">
-                                        <table class="table table-striped ng-scope ng-table table-hover" id="tableV" name="tableV">
+                                        <table class="table table-striped ng-scope ng-table table-hover">
                                             <thead style="background-color: #3e3e3e;">
                                                 <tr>
-                                                    <th>No.</th>
+                                                    <th>ID.</th>
                                                     <th>Name</th>
                                                     <th>Surname</th>
-                                                    <th>Phone</th>
-                                                    <th>Person Visited</th>
-                                                    <th>Time & Date In</th>
+                                                    <th>Email</th>
+                                                    <th>Employee ID</th>
+                                                    <th>Company Name</th>
+                                                    <th>Department</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -211,11 +224,12 @@ function filterTable($query) {
                                                 ?>
                                                         <tr>
                                                             <td><?php echo $no; ?></td>
-                                                            <td><?php echo ucwords(strtolower($data['person_name'])); ?></td>
-                                                            <td><?php echo ucwords(strtolower($data['person_surname'])); ?></td>
-                                                            <td><?php echo $data['person_contact']; ?></td>
-                                                            <td><?php echo strtolower($data['email_phone']); ?></td>
-                                                            <td><?php echo $data['timein']; ?></td>
+                                                            <td><?php echo ucwords(strtolower($data['firstname'])); ?></td>
+                                                            <td><?php echo ucwords(strtolower($data['surname'])); ?></td>
+                                                            <td><?php echo ucwords(strtolower($data['email'])); ?></td>
+                                                            <td><?php echo $data['employeeNo']; ?></td>
+                                                            <td><?php echo ucwords(strtolower($data['companyname'])); ?></td>
+                                                            <td><?php echo ucwords(strtolower($data['department'])); ?></td>
                                                         </tr>
                                                 <?php
                                                         $no++;
@@ -252,15 +266,14 @@ function filterTable($query) {
                                 </div>
                                 <div class="panel-footer">
                                     <div type="'excel'" class="ng-isolate-scope"><a class="ng-excel"><span></span></a></div>
-                                    <a href="../php/downloadVisitorsPDF.php" style="margin-left: 7px" id="pdfdownloadbtn" name="pdfdownloadbtn" class="btn btn-success ng-binding">Download PDF</a>
-                                        <a href="../php/downloadVisitors.php" style="margin-left: 7px" class="btn btn-success ng-binding">Download XLS</a>   
+                                    <a href="../php/downloadVisitorsPDF.php" style="margin-left: 7px" id="pdfdownloadbtn" class="btn btn-success ng-binding">Download PDF</a>  
+                                    <a href="../php/downloadVisitors.php" style="margin-left: 7px" class="btn btn-success ng-binding">Download XLS</a>   
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-    </div>
-    <div class="footer" style="position: fixed; bottom: 0; padding: 1px; margin: auto; ">
+                <div class="footer" style="position: fixed; bottom: 0; padding: 1px; margin: auto; ">
                 <div class="container-fluid">
                 <footer class="py-3 my-4">
                <div class="row">
@@ -274,6 +287,7 @@ function filterTable($query) {
             </div>
             </div>
         </div>
+    </div>
     <!-- jQuery for the notifications -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
