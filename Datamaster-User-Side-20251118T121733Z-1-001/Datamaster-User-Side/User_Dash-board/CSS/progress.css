@@ -10,10 +10,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-html, body {
+html,
+body {
   min-height: 100vh;
   background: #fff;
-  overflow: none;
+  overflow: auto;
+  /* Changed from none to auto to allow scrolling if needed */
+  margin: 0;
+  padding: 0;
+}
+
+.form-wrapper {
+  min-height: calc(100vh - 80px);
+  /* Adjust based on navbar height */
   display: flex;
   align-items: center;
   justify-content: center;

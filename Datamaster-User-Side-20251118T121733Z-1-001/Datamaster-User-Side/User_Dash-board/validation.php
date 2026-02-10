@@ -22,6 +22,15 @@ function sanitize_string(string $input): string {
 }
 
 /**
+ * Sanitize phone number to digits only
+ * @param string $phone The phone input
+ * @return string Digits only
+ */
+function sanitize_phone_number(string $phone): string {
+    return preg_replace('/[^0-9]/', '', $phone);
+}
+
+/**
  * Validate email address format
  * @param string $email The email to validate
  * @return bool True if valid email format

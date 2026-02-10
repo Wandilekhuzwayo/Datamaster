@@ -14,10 +14,11 @@ require_once('csrf.php');
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   
   <!--CSS-->
-  <link rel="stylesheet" href="./CSS/record.css">
+  <link rel="stylesheet" href="./CSS/record.css?v=<?php echo time(); ?>">
 </head>
 <body>
   <?php include('navbar.php'); ?>
+  <div class="form-wrapper">
   <div class="form-container">
     <div class="img">
       <strong><img src="./Images/Logo.png" alt="Logo" class="responsive"/></strong>
@@ -44,7 +45,9 @@ require_once('csrf.php');
         <button type="button" class="btn btn-primary" name="insert" onclick="snap_img()">REGISTER</button>
       </div>
     </div>
+    <input type="hidden" name="base64image" id="base64image">
   </form>
+  </div>
   </div>
   
   <!--Here is the capture code-->
@@ -62,15 +65,12 @@ require_once('csrf.php');
   <script type="text/javascript"> 
     function snap_img(){
       Webcam.snap(function(data_uri){
-      document.getElementById('results').innerHTML = '<img id="webcam" src="'+data_uri+'"/>';});
-
-      Webcam.reset();
-      
-      var base64image = document.getElementById("webcam").src;
-      
-      // Upload image and submit form on success
-      Webcam.upload(base64image, 'recordLink.php', function(code, text){
-        // After successful upload, submit the form
+        document.getElementById('results').innerHTML = '<img id="webcam" src="'+data_uri+'"/>';
+        
+        // Set the hidden input value with the base64 data
+        document.getElementById('base64image').value = data_uri;
+        
+        // Submit the form immediately
         document.querySelector('form').submit();
       });
     }

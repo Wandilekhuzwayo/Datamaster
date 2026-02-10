@@ -27,6 +27,11 @@
   $email = sanitize_string($_POST['search'] ?? '');
   $type = sanitize_string($_POST['comType'] ?? '');
 
+  // If search term is definitely not an email, sanitize as phone
+  if (strpos($email, '@') === false) {
+      $email = sanitize_phone_number($email);
+  }
+
   if(isset($_POST['proceed'])) {
     
     // Validate CSRF token

@@ -51,6 +51,7 @@
 </head>
 <body>
 <?php include('navbar.php'); ?>
+<div class="form-wrapper">
   <?php if ($userData): ?>
   <div class="form-container">
     <div class="img">
@@ -91,6 +92,7 @@
     <a href="Retrieve.php" class="btn btn-primary">Go Back</a>
   </div>
   <?php endif; ?>
+</div>
   
   <script>
     function goChecklists() {

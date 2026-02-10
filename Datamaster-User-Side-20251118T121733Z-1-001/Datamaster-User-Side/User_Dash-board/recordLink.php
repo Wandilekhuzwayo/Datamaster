@@ -46,24 +46,20 @@
   // Log errors instead of hiding them
   error_reporting(E_ALL);
   ini_set('log_errors', 1);
-  ini_set('display_errors', 1); // TEMPORARILY ENABLED FOR DEBUGGING
+  ini_set('display_errors', 1);
 
-  if(isset($_POST['insert'])) {
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Validate CSRF token
-    // TEMPORARILY DISABLED - Causing blank page issues
-    // validate_csrf();
+    // validate_csrf(); // Keep disabled if it caused issues, or re-enable if session config is stable
     
-    // Validate and process image upload securely
-    $imageName = '';
-    if (isset($_FILES["webcam"]) && $_FILES["webcam"]["error"] === UPLOAD_ERR_OK) {
-      $validation = validate_image_upload($_FILES["webcam"]);
-      
-      if (!$validation['valid']) {
+    $base64_string = $_POST['base64image'] ?? '';
+    
+    if (empty($base64_string)) {
         echo ("<script LANGUAGE='JavaScript'>
         Swal.fire({
           icon: 'error',
-          text: '" . addslashes($validation['error']) . "',
+          text: 'No image captured. Please try again.',
           confirmButtonText: 'OK',
           confirmButtonColor: '#3085d6', 
         }).then(function(){
@@ -71,11 +67,47 @@
         });
         </script>");
         exit;
-      }
-      
-      // Generate secure filename
-      $imageName = generate_secure_filename('jpeg');
-      move_uploaded_file($_FILES["webcam"]["tmp_name"], './img_Users/' . $imageName);
+    }
+
+    // Process Base64 Image
+    $data = explode(',', $base64_string);
+    if (count($data) >= 2) {
+        $decoded_image = base64_decode($data[1]);
+        
+        // Generate secure filename (using existing function or creating one)
+        if (!function_exists('generate_secure_filename')) {
+            function generate_secure_filename($ext) {
+                return bin2hex(random_bytes(16)) . '.' . $ext;
+            }
+        }
+        
+        $imageName = generate_secure_filename('jpeg');
+        
+        if (file_put_contents('./img_Users/' . $imageName, $decoded_image) === false) {
+             echo ("<script LANGUAGE='JavaScript'>
+            Swal.fire({
+              icon: 'error',
+              text: 'Failed to save image. Check server permissions.',
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#3085d6', 
+            }).then(function(){
+              window.location.href='Record.php';
+            });
+            </script>");
+            exit;
+        }
+    } else {
+         echo ("<script LANGUAGE='JavaScript'>
+        Swal.fire({
+          icon: 'error',
+          text: 'Invalid image data.',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#3085d6', 
+        }).then(function(){
+          window.location.href='Record.php';
+        });
+        </script>");
+        exit;
     }
     
     // Check for duplicate user using prepared statement
@@ -105,6 +137,10 @@
       
       if($insertStmt->execute()) {
         $insertStmt->close();
+        
+        // Clear session data after successful registration
+        // session_unset(); // Optional: might want to clear specific keys only
+        
         echo ("<script LANGUAGE='JavaScript'>
         Swal.fire({
           icon: 'success',
@@ -120,7 +156,7 @@
         echo ("<script LANGUAGE='JavaScript'>
         Swal.fire({
           icon: 'error',
-          text: 'User Details Inserted Unsuccessfully.',
+          text: 'User Details Inserted Unsuccessfully: " . addslashes($conn->error) . "',
           confirmButtonText: 'OK',
           confirmButtonColor: '#3085d6', 
         }).then(function(){

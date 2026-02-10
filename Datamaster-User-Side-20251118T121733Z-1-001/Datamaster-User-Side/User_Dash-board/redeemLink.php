@@ -27,6 +27,11 @@
   $email = sanitize_string($_POST['search'] ?? '');
   $option = sanitize_string($_POST['option'] ?? '');
 
+  // If search term is definitely not an email, sanitize as phone
+  if (strpos($email, '@') === false) {
+      $email = sanitize_phone_number($email);
+  }
+
   if(isset($_POST['vacate'])) {
     
     // Validate CSRF token
