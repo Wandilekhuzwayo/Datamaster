@@ -1,83 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign in</title>
-  <script src="jquery-3.6.1.min.js"></script>
- 
-
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body>
-  
-</body>
-</html>
-
 <?php
-  session_start();
-  include_once('connection.php');
-  if(isset($_POST['login-button'])) {
-    // username and password sent from form 
-    
-    $myusername = mysqli_real_escape_string($conn,$_POST['email']);
-    $mypassword = mysqli_real_escape_string($conn,$_POST['password']); 
-    $password = md5($mypassword);
-    
-    
-    
-    $sql_statement = "SELECT id, firstname FROM `admin_table` WHERE email= '$myusername' AND password = '$password'";
-    $result = mysqli_query($conn,$sql_statement);
-    $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-  
-    
-    $count = mysqli_num_rows($result);
-    
-    // If result matched $myusername and $mypassword, table row must be 1 row
-  
-    if($count == 1) {
+session_start();
+require_once "connection.php";
 
-    
-    echo "<script>
-    
-    Swal.fire({
-      icon: 'success',
-      text: 'Login success',
-      confirmButtonText: 'OK',
-      confirmButtonColor: '#3085d6',
-        
-    }).then(function(){
-      window.location.href='../Pages/index.php';
+if (isset($_POST['login-button'])) {
 
-    });
-    </script>";
+    $email    = trim($_POST['email']);
+    $password = $_POST['password'];
 
-    $_SESSION['firstname'] = $myusername;
-    }
-    
-    else {
-       
-    echo "<script>
-    Swal.fire({
-      icon: 'error',
-      title: 'error ',
-      text: 'incorrect password or username',
-      confirmButtonText: 'OK',
-      confirmButtonColor: '#3085d6',
-
-    }).then(function(){
-      window.location.href='../Pages/signin.html';
-
-    });
-    
-    
-
-
-    </script>";
+    // =========================
+    // BASIC VALIDATION
+    // =========================
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $_SESSION['login_error'] = "Invalid email format.";
+        header("Location: ../pages/signin.html");
+        exit();
     }
 
+    // =========================
+    // FETCH USER
+    // =========================
+    $stmt = $conn->prepare("
+        SELECT id, firstname, password, role, status 
+        FROM admin_table 
+        WHERE email = ?
+        LIMIT 1
+    ");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
 
-    
- }
+    if ($stmt->num_rows === 0) {
+        $_SESSION['login_error'] = "Incorrect username or password.";
+        header("Location: ../pages/signin.html");
+        exit();
+    }
+
+    $stmt->bind_result($id, $firstname, $hashedPassword, $role, $status);
+    $stmt->fetch();
+
+    // =========================
+    // CHECK STATUS
+    // =========================
+    if ($status !== 'active') {
+        $_SESSION['login_error'] = "Your account has been disabled. Contact Super Admin.";
+        header("Location: ../pages/signin.html");
+        exit();
+    }
+
+    // =========================
+    // VERIFY PASSWORD
+    // =========================
+    if (!password_verify($password, $hashedPassword)) {
+        $_SESSION['login_error'] = "Incorrect username or password.";
+        header("Location: ../pages/signin.html");
+        exit();
+    }
+
+    // =========================
+    // UPDATE LAST LOGIN
+    // =========================
+    $update = $conn->prepare("
+        UPDATE admin_table 
+        SET last_login = NOW() 
+        WHERE id = ?
+    ");
+    $update->bind_param("i", $id);
+    $update->execute();
+
+    // =========================
+    // LOGIN SUCCESS
+    // =========================
+    $_SESSION['admin_email'] = $email;
+    $_SESSION['id']          = $id;
+    $_SESSION['firstname']  = $firstname;
+    $_SESSION['role']       = $role;
+
+    // =========================
+    // ROLE-BASED REDIRECT
+    // =========================
+    if ($role === 'super_admin') {
+        header("Location: ../superadmin/dashboard.php");
+    } else {
+        header("Location: ../pages/index.php");
+    }
+    exit();
+}
 ?>

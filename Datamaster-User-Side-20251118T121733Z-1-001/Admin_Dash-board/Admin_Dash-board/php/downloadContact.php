@@ -1,63 +1,88 @@
-<?php 
-  //Get Connection 
-  include ('../php/connection.php');
+<?php
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
+ob_start();
 
-  //Initialize variable
-  $export = '';
+// Include files
+include('../php/connection.php');
+include("../php/auth_session.php");
 
-  //call the TCPDF class
-  require_once('../tcpdf/tcpdf.php');
+// Get user's email from session
+$emailAddres = $_SESSION["firstname"];
 
-  $obj_pdf = new TCPDF('p', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+// Ensure $currentDatetime is always defined
+$currentDatetime = date("Y-m-d H:i:s");
 
-  $obj_pdf->SetCreator(PDF_CREATOR);
+// Query for user info (optional, if needed in PDF header)
+$result = mysqli_query($conn, "SELECT firstname, surname, email, companyname, employeeNo, department FROM `admin_table` WHERE email ='$emailAddres'");
+if ($result && mysqli_num_rows($result) > 0) {
+    $row = mysqli_fetch_assoc($result);
+    $firstname = $row['firstname'];
+    $lastname = $row['surname'];
+    $email = $row['email'];
+    $Enterprise = $row['companyname'];
+    $employeeID = $row['employeeNo'];
+    $department = $row['department'];
+}
 
-  $obj_pdf->SetHeaderData('', '', PDF_HEADER_TITLE, PDF_HEADER_STRING);
+// Include TCPDF
+require_once('../tcpdf/tcpdf.php');
 
-  $obj_pdf->SetHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_DATA));
+// Create PDF
+$pdf = new TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+$pdf->SetCreator(PDF_CREATOR);
+$pdf->setPrintHeader(false);
+$pdf->setPrintFooter(false);
+$pdf->SetMargins(PDF_MARGIN_LEFT, 10, PDF_MARGIN_RIGHT);
+$pdf->SetAutoPageBreak(TRUE, 10);
+$pdf->SetFont('helvetica', '', 12);
+$pdf->AddPage();
 
-  $obj_pdf->SetMargins(PDF_MARGIN_LEFT, '5', PDF_MARGIN_RIGHT);
-  $obj_pdf->setPrintHeader(false);
-  $obj_pdf->setPrintFooter(false);
-  $obj_pdf->SetAutoPageBreak(TRUE, 10);
-  $obj_pdf->SetFont('helvetica', '', 12);
-  $obj_pdf->AddPage();
+// Add logo
+$pdf->Image('../images/Logo.jpeg', 200, 3, 55, 20, 'JPEG');
 
-  //Select query
-  $query = "SELECT fname, lname, mnum, contact, email FROM `user_table`";
-  $res = mysqli_query($conn, $query);
- if(mysqli_num_rows($res) > 0)
- {
- $no=1;
- $export .='
- <table width="107%" cellpadding="1" cellspacing="1" border="1"> 
- <tr> 
- <th>ID</th>
- <th>First Name</th>
- <th>Last Name</th>
- <th>Mobile Number</th>
- <th>Alt. Contact Number</th>
- <th>Email Address</th>
- </tr>
- ';
- while($row = mysqli_fetch_array($res))
- {
-  $export .='
- <tr>
- <td>'.$no.'</td> 
- <td>'.$row["fname"].'</td> 
- <td>'.$row["lname"].'</td> 
- <td>'.$row["mnum"].'</td> 
- <td>'.$row["contact"].'</td>
- <td>'.$row["email"].'</td>  
- </tr>
- ';
- $no++;
- }
- $export .= '</table>';
- $obj_pdf->writeHTML($export);
+// PDF title
+$pdf->SetFont('helvetica', 'B', 13);
+$pdf->Cell(0, 5, 'DataMaster: Registered Visitors Report', 0, 1);
+$pdf->SetFont('helvetica', '', 12);
+$pdf->Cell(30, 5, 'Date:', 0, 0);
+$pdf->Cell(50, 5, $currentDatetime, 0, 1);
+$pdf->Ln(5);
 
- $obj_pdf->Output("contact.pdf");
- echo $export;
- }
+// Query data
+$query = "SELECT fname, lname, mnum, contact, email FROM `user_table`";
+$res = mysqli_query($conn, $query);
+
+$export = '';
+if ($res && mysqli_num_rows($res) > 0) {
+    $export = '<table border="1" cellpadding="4">
+    <tr style="background-color:#3ab5e6; color:white;">
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Mobile Number</th>
+        <th>Alternate No.</th>
+        <th>Email Address</th>
+    </tr>';
+
+    $no = 1;
+    while ($row = mysqli_fetch_assoc($res)) {
+        $export .= '<tr>
+            <td>'.$no.'</td>
+            <td>'.$row["fname"].'</td>
+            <td>'.$row["lname"].'</td>
+            <td>'.$row["mnum"].'</td>
+            <td>'.$row["contact"].'</td>
+            <td>'.$row["email"].'</td>
+        </tr>';
+        $no++;
+    }
+    $export .= '</table>';
+}
+
+// Write table to PDF
+$pdf->writeHTML($export, true, false, true, false, '');
+
+// Output PDF to browser
+$pdf->Output("DataMaster_RegisteredVisitors.pdf", "I");
+exit();
 ?>

@@ -34,7 +34,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-        <title>Datamaster History
+        <title>Datamaster Registered Visitors
 		</title>
 	    <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
@@ -69,12 +69,12 @@
     <!-- Sidebar  -->
     <nav id="sidebar">
         <div class="sidebar-header">
-            <h3><img src="../images/Logo Icon.png" alt="Logo"><span> Datamaster</span></h3>
+            <h3><img src="../images/Logo Icon.png" alt="Logo"><span>Datamaster</span></h3>
         </div>
         <ul class="list-unstyled components">
         <li  class="active">
-                <a href="../pages/index.php" class="dashboard"><i class=" bi bi-speedometer2 material-icons"></i><span>Dashboard</span></a>
-            </li>
+            <a href="../pages/index.php" class="dashboard"><i class="bi bi-speedometer2 material-icons"></i><span>Dashboard</span></a>
+        </li>
     
             <div class="small-screen navbar-display">
             
@@ -85,10 +85,10 @@
                 <i class="bi bi-people material-icons"></i><span>Manage Users</span></a>
                 <ul class="collapse list-unstyled menu" id="homeSubmenu1">
                     <li>
-                        <a href="../pages/signup.html"><i class="bi bi-person-plus material-icons"></i><span>Add Users</span></a>
+                        <a href="../pages/add_user.php"><i class="bi bi-person-plus material-icons"></i><span>Add Users</span></a>
                     </li>
                     <li>
-                        <a href="#"><i class="bi bi-person-workspace material-icons"></i> <span>View Users</span></a>
+                        <a href="../pages/viewUsers.php"><i class="bi bi-person-workspace material-icons"></i> <span>View Users</span></a>
                     </li>
                    
                 </ul>
@@ -96,26 +96,39 @@
             
             <li class="dropdown">
                 <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                <i class="bi bi-pen material-icons"></i><span>Manage Vistors</span></a>
-                <ul class="collapse list-unstyled menu" id="pageSubmenu2">
-                    <li>
-                        <a href="../pages/activeVisitors.php"><i class="bi bi-radioactive material-icons" ></i><span>Active Visitors</span></a>
-                    </li>
-                    <li>
-                        <a href="../pages/visitorsHistory.php"><i class="bi bi-clock-history material-icons"></i><span>History</span></a>
-                    </li>
-                    <li>
-                        <a href="../pages/visitorContact.php"><i class="bi bi-person-lines-fill material-icons"></i><span>Contact</span></a>
-                    </li>
-                </ul>
+                <i class="bi bi-pen material-icons"></i><span>Manage Visitors</span></a>
+                    <ul class="collapse list-unstyled menu" id="pageSubmenu2">
+                        <li>
+                            <a href="../pages/activeVisitors.php"><i class="bi bi-radioactive material-icons" ></i><span>Active Visitors</span></a>
+                        </li>
+                        <li>
+                            <a href="../pages/visitorsHistory.php"><i class="bi bi-clock-history material-icons"></i><span>History</span></a>
+                        </li>
+                        <li>
+                            <a href="../pages/visitorContact.php"><i class="bi bi-person-lines-fill material-icons"></i><span>Registered Visitors</span></a>
+                        </li>
+                    </ul>
             </li>
+
+
+            <li class="dropdown">
+            <a href="#homeSubmenu3" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="bi bi-graph-up-arrow"></i><span>Reporting</span></a>
+             <ul class="collapse list-unstyled menu" id="homeSubmenu3">
+        <li>
+            <a href="../pages/report.php"><i class="bi bi-calendar material-icons" class="dashboard"></i><span>Time Interval Reports</span></a>
+        </li>
+        <li>
+                <a href="../pages/customReporting.php"><i class="bi bi-file-bar-graph material-icons"></i><span>Custom Report</span></a>
+                </li>
+    </ul>
+    </li>
+
             
-             <li  class="">
-                <a href="../php/signout.php"><i class="bi bi-box-arrow-left material-icons"></i><span>Sign Out</span></a>
-            </li>
-           
-           
-        </ul>
+    <li>
+        <a href="../php/signout.php"><i class="bi bi-box-arrow-left material-icons"></i><span>Sign Out</span></a>
+    </li>
+ </ul>
        
     </nav>
 
@@ -173,7 +186,7 @@
                                 </li>
 
                                 <li>
-                                    <a href="#"><i class="bi bi-person material-icons px-2" ></i><span> Profile</span></a>
+                                    <a href="popUpProFile.php"><i class="bi bi-person material-icons px-2" ></i><span> Profile</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -186,7 +199,7 @@
         
         <div class="main-content">
             <div class="d-sm-flex align-items-center justify-content-between mb-3">
-                <h1 class="h3 mb-0 ">Dashboard</h1>
+                <h1 class="h3 mb-0 ">Registered Visitors</h1>
                 <!--Do A form here please-->
                 <form action="visitorContact.php" method="POST">
                 <input type="text" class="control-search" name="search" placeholder="Search Here"/>
@@ -207,18 +220,28 @@
                                 <thead style="background-color: #3e3e3e;">
                                 <tr>
 
-                                    <th>No. 
-                                             
-                                    </th> <th>Name 
-                                               
-                                    </th> <th>Surname 
-                                           
-                                    </th> <th>Phone 
-                                              
-                                    </th> <th>Alt. Phone 
-                                             
-                                    </th> <th>Email 
-                                          
+                                    <th style="width:5%">
+                                        No.        
+                                    </th> 
+
+                                    <th>
+                                        Name        
+                                    </th>
+
+                                    <th>
+                                        Surname    
+                                    </th> 
+                                    
+                                    <th>
+                                        Phone       
+                                    </th> 
+                                    
+                                    <th>
+                                        Alt. Phone    
+                                    </th> 
+                                    
+                                    <th>
+                                        Email   
                                     </th> 
                                 </tr>
                                 </thead>
@@ -248,7 +271,8 @@
                        </form>
                        <div class="panel-footer">
                           <div   type="'excel'"  class="ng-isolate-scope"><a class="ng-excel"><span></span></a></div>
-                          <a href="../php/downloadContact.php" style="margin-left: 7px"   class="btn btn-success ng-binding">Download PDF</a>   
+                          <a href="../php/downloadContact.php" name="pdfDownload" id="pdfDownload" style="margin-left: 7px"   class="btn btn-success ng-binding">Download PDF</a>
+                          <a href="../php/downloadContactXl.php" name="xlsDownload" id="xlsDownload" style="margin-left: 7px"   class="btn btn-success ng-binding">Download XLS</a>   
                        </div>
                     </div>
                  </div>
@@ -274,16 +298,18 @@
             </div>--> 
         </div>
                 
-                <footer class="footer" style="position: fixed; bottom: 0;">
-                    <div class="container-fluid">
-                      <div class="row">
-                    <div class="col ">
-                     <p class="copyright d-flex justify-content-center "> &copy  Datamaster, 2022 - Privacy Policy
-                        </p>
+        <div class="footer" style="position: fixed; bottom: 0; padding: 1px; margin: auto; ">
+                <div class="container-fluid">
+                <footer class="py-3 my-4">
+               <div class="row">
+                    <div class="col">
+                <p class="copyright d-flex justify-content-center"> &copy  Datamaster, 2023 - Privacy Policy</p>
                     </div>
-                      </div>
-                        </div>
-                </footer>
+               </div>
+            </div>
+            </footer>
+        </div>
+            </div>
 
     </div>
   

@@ -1,0 +1,60 @@
+<?php 
+  //Call Auth_session on Home
+  include("../php/auth_session.php");
+
+  //Call a connection
+  include('../php/connection.php');
+  
+  if(isset($_POST["profileLnk"]))
+  {
+     $email = $_SESSION['firstname'];
+     $admin_quary = mysqli_query($conn,"Select * from admin_table where email = '$email'") or die  ('Oops we ran to an issue, please try again later ');
+     
+     if(mysqli_num_rows($admin_quary) != 1)
+    {
+        die('Oopps we experienced a technical error please try again later...');    
+    }
+    else
+    {
+        while ($row = mysqli_fetch_array($admin_quary, MYSQLI_ASSOC))
+        {
+            $Name = $row["firstname"];
+            $Surname = $row["lastname"];
+            $emailAddress = $row["email"];
+            $employeeID = $row["employeeNo"];
+            $dapartment = $row["department"];
+
+        }
+    }
+  } 
+  else
+  {
+    ("Error with the connection to db");
+  }
+  ?>
+    </script>
+    <!-- /jQuery for the norifications -->
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   <script src="../js/jquery-3.3.1.slim.min.js"></script>
+   <script src="../js/popper.min.js"></script>
+   <script src="../js/bootstrap.min.js"></script>
+   <script src="../js/jquery-3.3.1.min.js"></script>
+   <script src="../js/barchart.js"></script>
+  
+  <script type="text/javascript">
+  $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+				$('#content').toggleClass('active');
+            });
+			
+			 $('.more-button,.body-overlay').on('click', function () {
+                $('#sidebar,.body-overlay').toggleClass('show-nav');
+            });
+			
+        });
+</script>
+</body>
+</html>
+?>

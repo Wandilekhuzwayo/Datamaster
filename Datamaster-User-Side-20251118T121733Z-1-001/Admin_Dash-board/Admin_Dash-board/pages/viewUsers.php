@@ -8,11 +8,11 @@
   //Select query
   if(isset($_POST['search-info'])){
     $searchValue = $_POST['search'];
-    $query = "SELECT * FROM `admin_table` WHERE CONCAT(`firstname`, `surname`, `email`, `employeeNo`, `department`) LIKE '%".$searchValue."%'";
+    $query = "SELECT id, fname, lname, mnum, contact, email FROM `user_table` WHERE CONCAT(`fname`, `lname`, `mnum`, `contact`, `email`) LIKE '%".$searchValue."%'";
     $result = filterTable($query);
   }
   else {
-    $query = "SELECT * FROM `admin_table`";
+    $query = "SELECT id, fname, lname, mnum, contact, email, cname, addresses, city, province FROM `user_table`";
     $result = filterTable($query);
   }
 
@@ -34,18 +34,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-        <title>Datamaster - View Users
+        <title>Datamaster Users
 		</title>
 	    <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
         <link rel="stylesheet" href="../css/bootstrap.min.css">
-	    
-        <!----css3---->
+
+	    <!----css3---->
         <link rel="stylesheet" href="../css/custom.css">
         <link rel="stylesheet" href="../css/styles.css">
         <link rel="stylesheet" href="../css/styling.css">
-
-		<!-- SLIDER REVOLUTION 4.x CSS SETTINGS -->
+		
+        <!-- SLIDER REVOLUTION 4.x CSS SETTINGS -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -69,25 +69,25 @@
     <!-- Sidebar  -->
     <nav id="sidebar">
         <div class="sidebar-header">
-            <h3><img src="../images/Logo Icon.png" alt="Logo"><span> Datamaster</span></h3>
+            <h3><img src="../images/Logo Icon.png" alt="Logo"><span>Datamaster</span></h3>
         </div>
         <ul class="list-unstyled components">
-        <li  class="">
-                <a href="../pages/index.php" class="dashboard"><i class=" bi bi-speedometer2 material-icons"></i><span>Dashboard</span></a>
-            </li>
+        <li  class="active">
+            <a href="../pages/index.php" class="dashboard"><i class="bi bi-speedometer2 material-icons"></i><span>Dashboard</span></a>
+        </li>
     
             <div class="small-screen navbar-display">
             
             </div>
         
-            <li class="dropdown active">
-                <a href="#homeSubmenu1" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+            <li class="dropdown">
+                <a href="#homeSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                 <i class="bi bi-people material-icons"></i><span>Manage Users</span></a>
-                <ul class="collapse list-unstyled menu show" id="homeSubmenu1">
+                <ul class="collapse list-unstyled menu" id="homeSubmenu1">
                     <li>
-                        <a href="../pages/signup.html"><i class="bi bi-person-plus material-icons"></i><span>Add Users</span></a>
+                        <a href="../pages/add_user.php"><i class="bi bi-person-plus material-icons"></i><span>Add Users</span></a>
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="../pages/viewUsers.php"><i class="bi bi-person-workspace material-icons"></i> <span>View Users</span></a>
                     </li>
                    
@@ -96,26 +96,39 @@
             
             <li class="dropdown">
                 <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                <i class="bi bi-pen material-icons"></i><span>Manage Vistors</span></a>
-                <ul class="collapse list-unstyled menu" id="pageSubmenu2">
-                    <li>
-                        <a href="../pages/activeVisitors.php"><i class="bi bi-radioactive material-icons" ></i><span>Active Visitors</span></a>
-                    </li>
-                    <li>
-                        <a href="../pages/visitorsHistory.php"><i class="bi bi-clock-history material-icons"></i><span>History</span></a>
-                    </li>
-                    <li>
-                        <a href="../pages/visitorContact.php"><i class="bi bi-person-lines-fill material-icons"></i><span>Contact</span></a>
-                    </li>
-                </ul>
+                <i class="bi bi-pen material-icons"></i><span>Manage Visitors</span></a>
+                    <ul class="collapse list-unstyled menu" id="pageSubmenu2">
+                        <li>
+                            <a href="../pages/activeVisitors.php"><i class="bi bi-radioactive material-icons" ></i><span>Active Visitors</span></a>
+                        </li>
+                        <li>
+                            <a href="../pages/visitorsHistory.php"><i class="bi bi-clock-history material-icons"></i><span>History</span></a>
+                        </li>
+                        <li>
+                            <a href="../pages/visitorContact.php"><i class="bi bi-person-lines-fill material-icons"></i><span>Registered Visitors</span></a>
+                        </li>
+                    </ul>
             </li>
+
+
+            <li class="dropdown">
+            <a href="#homeSubmenu3" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="bi bi-graph-up-arrow"></i><span>Reporting</span></a>
+             <ul class="collapse list-unstyled menu" id="homeSubmenu3">
+        <li>
+            <a href="../pages/report.php"><i class="bi bi-calendar material-icons" class="dashboard"></i><span>Time Interval Reports</span></a>
+        </li>
+        <li>
+                <a href="../pages/customReporting.php"><i class="bi bi-file-bar-graph material-icons"></i><span>Custom Report</span></a>
+                </li>
+    </ul>
+    </li>
+
             
-             <li  class="">
-                <a href="../php/signout.php"><i class="bi bi-box-arrow-left material-icons"></i><span>Sign Out</span></a>
-            </li>
-           
-           
-        </ul>
+    <li>
+        <a href="../php/signout.php"><i class="bi bi-box-arrow-left material-icons"></i><span>Sign Out</span></a>
+    </li>
+ </ul>
        
     </nav>
 
@@ -173,25 +186,25 @@
                                 </li>
 
                                 <li>
-                                    <a href="#"><i class="bi bi-person material-icons px-2" ></i><span> Profile</span></a>
+                                    <a href="popUpProFile.php"><i class="bi bi-person material-icons px-2" ></i><span> Profile</span></a>
                                 </li>
                             </ul>
                         </li>
                         
                     </ul>
-                </div>
+                </div>s
             </div>
         </nav>
     </div>
         
         <div class="main-content">
             <div class="d-sm-flex align-items-center justify-content-between mb-3">
-                <h1 class="h3 mb-0 ">View Users</h1>
+                <h1 class="h3 mb-0 ">Users</h1>
                 <!--Do A form here please-->
-                <form action="viewUsers.php" method="POST">
+                <form action="visitorContact.php" method="POST">
                 <input type="text" class="control-search" name="search" placeholder="Search Here"/>
                 <button type="submit" class="btn btn-primary" name="search-info"><i class="fa fa-search" aria-hidden="true"></i></button>
-
+                </form>
             </div>
 
             <!-- Modal HTML -->
@@ -205,53 +218,102 @@
                           <div class="">
                              <table  class="table table-striped ng-scope ng-table table-hover">
                                 <thead style="background-color: #3e3e3e;">
-                                   <tr>
-                                    
-                                    <th>No. 
-                                              
-                                    </th> <th>First Name 
-                                              
-                                    </th> <th>Surname 
-                                          
-                                    </th> <th>Email 
-                                          
-                                    </th> <th>Employee No 
-                                           
-                                    </th> <th>Department
+                               
+                                <tr>
+
+                                    <th style="width:5%">
+                                        No.        
                                     </th> 
-                                   </tr>
+
+
+                                    <th>
+                                        Name        
+                                    </th>
+
+                                    <th>
+                                        Surname    
+                                    </th> 
+                                    
+                                    <th>
+                                        Phone       
+                                    </th> 
+                                    
+                                    <th>
+                                        Phone    
+                                    </th> 
+                                    
+                                    <th>
+                                        Email   
+                                    </th> 
+
+                                    <th>
+                                        Company Name
+                                    </th>
+
+                                    <th>
+                                        Address
+                                    </th>
+
+                                    <th>
+                                        City
+                                    </th>
+
+                                    <th>
+                                        Province
+                                    </th>
+
+                        
+
+                                </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                   <?php
-                                   if(mysqli_num_rows($result) > 0){
-                                     $no = 1;
-                                     while($data = mysqli_fetch_assoc($result)) {
-                                    ?>
-                                    <td>
-                                        <?php echo $no; ?>
-                                    </td> <td>
-                                        <?php echo $data['firstname']; ?>
-                                     </td> <td>
-                                        <?php echo $data['surname']; ?>
-                                      </td> <td>
-                                        <?php echo $data['email']; ?>
-                                      </td> <td>
-                                        <?php echo $data['employeeNo']; ?>
-                                      </td> <td>
-                                         <?php echo $data['department']; ?>
+                                <?php while($data = mysqli_fetch_array($result)):?>
+                                   <tr>
+                                   
+                                      <td>
+                                        <?php echo $data['id']; ?>
+                                      </td>
+
+                                      
+                                      <td>
+                                        <?php echo $data['fname']; ?>
+                                      </td>
+                                      
+                                      <td>
+                                        <?php echo $data['lname']; ?>
+                                      </td>
+                                      
+                                      <td>
+                                        <?php echo $data['mnum']; ?>
                                       </td> 
+                                      
+                                      <td>
+                                        <?php echo $data['contact']; ?>
+                                      </td>
+                                      
+                                      <td>
+                                        <?php echo $data['email']; ?>
+                                      </td> 
+
+                                      <td>
+                                        <?php echo $data['cname']; ?>
+                                      </td>
+                                      
+                                      <td>
+                                        <?php echo $data['address']; ?>
+                                      </td>
+                                      
+                                      <td>
+                                        <?php echo $data['city']; ?>
+                                      </td>
+                                      
+                                      <td>
+                                        <?php echo $data['province']; ?>
+                                      </td>
+
+                                     
                                    </tr>
-                                   <?php $no++;
-                                     }
-                                    }
-                                    else {
-                                        ?>
-                                        <tr>
-                                            <td colspan="8">No Data Found</td>
-                                        </tr>
-                                        <?php 
-                                    } ?>
+                                   <?php endwhile;?>  
                               </tbody>
                              </table><div  class="ng-scope"> <div   class="ng-scope"> </div></div>
                           </div>
@@ -259,32 +321,49 @@
                        </div>
                        </form>
                        <div class="panel-footer">
-                          <!-- <div   type="'excel'"  class="ng-isolate-scope"><a class="ng-excel"><span></span></a></div>
-                          <a href="../php/downloadVisitors.php" style="margin-left: 7px"   class="btn btn-success ng-binding">Download XLS</a> -->   
+                          <div   type="'excel'"  class="ng-isolate-scope"><a class="ng-excel"><span></span></a></div>
+                          <a href="../php/downloadContact.php" name="pdfDownload" id="pdfDownload" style="margin-left: 7px"   class="btn btn-success ng-binding">Download PDF</a>
+                          <a href="../php/viewUserExc.php" name="xlsDownload" id="xlsDownload" style="margin-left: 7px"   class="btn btn-success ng-binding">Download XLS</a>   
                        </div>
                     </div>
                  </div>
               </div>
            </div>
-        </div>
-                
-                <footer class="footer" style="position: fixed; bottom: 0;">
-                    <div class="container-fluid">
-                      <div class="row">
-                    <div class="col ">
-                     <p class="copyright d-flex justify-content-center "> &copy  Datamaster, 2022 - Privacy Policy
-                        </p>
-                    </div>
-                      </div>
-                        </div>
-                </footer>
 
+
+            <!--<div class="row">
+                <div class="col-xl-8 col-lg-7">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-secondary">Daily Visitors count</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-area">
+                                <canvas id="myAreaChart"></canvas>
+                            </div>
+
+                        </div>
+                    </div> 
+
+                </div>
+            </div>--> 
+        </div>
     </div>
-  
+ 
     <!-- Second modal dialog -->
 </div>
-
-     
+<div class="footer" style="position: fixed; bottom: 0; padding: 1px; margin: auto; ">
+                <div class="container-fluid">
+                <footer class="py-3 my-4">
+               <div class="row">
+                    <div class="col">
+                <p class="copyright d-flex justify-content-center"> &copy  Datamaster, 2023 - Privacy Policy</p>
+                    </div>
+               </div>
+            </div>
+            </footer>
+        </div>
+            </div>
     <!-- jQuery for the norifications -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -327,3 +406,5 @@
 </body>
   
 </html>
+
+

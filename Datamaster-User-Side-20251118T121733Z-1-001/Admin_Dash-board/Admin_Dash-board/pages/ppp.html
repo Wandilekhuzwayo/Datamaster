@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Viewer</title>
+    <style>
+        /* Add your CSS styles for graph and table here */
+    </style>
+</head>
+<body>
+    <label for="view-selector">Select view:</label>
+    <select id="view-selector">
+        <option value="graph">Graph</option>
+        <option value="table">Table</option>
+    </select>
+
+    <div id="graph-view" style="display: none;">
+        <!-- Add graph here -->
+    </div>
+    <div id="table-view" style="display: none;">
+        <!-- Add table here -->
+    </div>
+
+    <script>
+        const viewSelector = document.getElementById("view-selector");
+        const graphView = document.getElementById("graph-view");
+        const tableView = document.getElementById("table-view");
+
+        viewSelector.addEventListener("change", () => {
+            const selectedView = viewSelector.value;
+            if (selectedView === "graph") {
+                graphView.style.display = "block";
+                tableView.style.display = "none";
+            } else if (selectedView === "table") {
+                graphView.style.display = "none";
+                tableView.style.display = "block";
+            }
+        });
+    </script>
+</body>
+</html>
