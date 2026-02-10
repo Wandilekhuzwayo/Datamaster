@@ -40,10 +40,13 @@
 
         .button-container {
             display: flex;
-            justify-content: center;
-            gap: 30px;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
             margin-bottom: 80px;
-            flex-wrap: wrap;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .nav-button {
@@ -58,9 +61,10 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(91, 127, 199, 0.3);
-            min-width: 200px;
+            width: 100%;
             text-transform: uppercase;
             letter-spacing: 1px;
+            text-align: center;
         }
 
         .nav-button:hover {
@@ -85,12 +89,6 @@
 
         @media (max-width: 600px) {
             .button-container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .nav-button {
-                width: 100%;
                 max-width: 300px;
             }
 
@@ -110,6 +108,8 @@
         <div class="button-container">
             <a href="Datamaster-User-Side-20251118T121733Z-1-001/Admin_Dash-board/Admin_Dash-board/pages/signin.html"
                 class="nav-button">Admin</a>
+            <a href="Datamaster-User-Side-20251118T121733Z-1-001/Datamaster-User-Side/User_Dash-board/employee/login.php"
+                class="nav-button">Employee</a>
             <a href="Datamaster-User-Side-20251118T121733Z-1-001/Datamaster-User-Side/User_Dash-board/Dashboard.php"
                 class="nav-button">Visitor</a>
         </div>

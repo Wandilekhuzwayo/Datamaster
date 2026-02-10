@@ -17,6 +17,7 @@ require_once('csrf.php');
   <link rel="stylesheet" href="./CSS/record.css">
 </head>
 <body>
+  <?php include('navbar.php'); ?>
   <div class="form-container">
     <div class="img">
       <strong><img src="./Images/Logo.png" alt="Logo" class="responsive"/></strong>

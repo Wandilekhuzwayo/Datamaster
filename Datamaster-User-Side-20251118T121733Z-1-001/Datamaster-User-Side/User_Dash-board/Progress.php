@@ -50,6 +50,7 @@
  
 </head>
 <body>
+<?php include('navbar.php'); ?>
   <?php if ($userData): ?>
   <div class="form-container">
     <div class="img">

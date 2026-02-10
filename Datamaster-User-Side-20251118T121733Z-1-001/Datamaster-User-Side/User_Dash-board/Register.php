@@ -17,6 +17,7 @@ require_once('csrf.php');
   <link rel="stylesheet" href="./CSS/register.css">
 </head>
 <body>
+  <?php include('navbar.php'); ?>
   <div class="form-body">
     <div class="row">
         <div class="form-holder">
