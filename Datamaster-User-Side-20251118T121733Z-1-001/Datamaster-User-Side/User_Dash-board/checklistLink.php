@@ -28,6 +28,12 @@
 
   // Get and sanitize input
   $emailAddress = sanitize_string($_GET['uniqueEmail'] ?? '');
+  
+  // If looks like phone (no @, no letters), ensure it is sanitized
+  if (strpos($emailAddress, '@') === false && !preg_match('/[a-zA-Z]/', $emailAddress)) {
+      $emailAddress = sanitize_phone_number($emailAddress);
+  }
+
   $personName = sanitize_string($_POST['personName'] ?? '');
   $personSurname = sanitize_string($_POST['personSurname'] ?? '');
   $personContact = sanitize_string($_POST['personContact'] ?? '');

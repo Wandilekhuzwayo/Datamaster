@@ -27,8 +27,8 @@
   $email = sanitize_string($_POST['search'] ?? '');
   $option = sanitize_string($_POST['option'] ?? '');
 
-  // If search term is definitely not an email, sanitize as phone
-  if (strpos($email, '@') === false) {
+  // If search term is definitely not an email and has no letters, sanitize as phone
+  if (strpos($email, '@') === false && !preg_match('/[a-zA-Z]/', $email)) {
       $email = sanitize_phone_number($email);
   }
 

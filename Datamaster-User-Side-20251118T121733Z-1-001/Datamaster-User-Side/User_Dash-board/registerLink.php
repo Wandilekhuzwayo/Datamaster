@@ -1,6 +1,9 @@
-<?php 
+<?php
   //Start the session
   session_start();
+  
+  // Include validation functions
+  require_once('validation.php');
 
   //storing the session data
   if(isset($_POST["next"])){

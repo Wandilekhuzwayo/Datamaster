@@ -27,7 +27,7 @@
   include('connection.php');
 
   // Sanitize input
-  $emailAddress = sanitize_string($_GET['logout'] ?? '');
+  $logoutParam = $_GET['logout'] ?? '';
   $timeout = date("Y/m/d H:i:sa");
 
   if(isset($_POST['exit'])) {
@@ -35,15 +35,44 @@
     // Validate CSRF token
     // TEMPORARILY DISABLED - Causing blank page issues
     // validate_csrf();
+
+    $identifiers = [];
+
+    // If param is numeric, treat as User ID and fetch details
+    if(is_numeric($logoutParam)) {
+        $stmtUser = $conn->prepare("SELECT mnum, email FROM user_table WHERE id = ?");
+        $stmtUser->bind_param("i", $logoutParam);
+        $stmtUser->execute();
+        $resUser = $stmtUser->get_result();
+        if($u = $resUser->fetch_assoc()) {
+            if(!empty($u['mnum'])) $identifiers[] = $u['mnum'];
+            if(!empty($u['email'])) $identifiers[] = $u['email'];
+        }
+        $stmtUser->close();
+    } else {
+        // Fallback for legacy calls or direct searches
+        $identifiers[] = sanitize_string($logoutParam);
+    }
     
-    // Update using prepared statement
-    $searchTerm = '%' . $emailAddress . '%';
-    $emptyTimeout = '';
-    $stmt = $conn->prepare("UPDATE `questions_table` SET timeout = ? WHERE email_phone LIKE ? AND timeout = ?");
-    $stmt->bind_param("sss", $timeout, $searchTerm, $emptyTimeout);
+    $updated = false;
+
+    // Try to update records for ANY of the identifiers (Phone or Email)
+    // Also check for timeout = '0' (default) or '' (legacy)
+    $stmt = $conn->prepare("UPDATE `questions_table` SET timeout = ? WHERE email_phone LIKE ? AND (timeout = '0' OR timeout = '')");
     
-    if($stmt->execute() && $stmt->affected_rows > 0) {
-      $stmt->close();
+    foreach($identifiers as $idVal) {
+        if(empty($idVal)) continue;
+        
+        $searchTerm = '%' . $idVal . '%';
+        $stmt->bind_param("ss", $timeout, $searchTerm);
+        
+        if($stmt->execute() && $stmt->affected_rows > 0) {
+            $updated = true;
+        }
+    }
+    $stmt->close();
+    
+    if($updated) {
       echo ("<script LANGUAGE='JavaScript'>
       Swal.fire({
         icon: 'success',
@@ -55,7 +84,6 @@
       });
       </script>");
     } else {
-      $stmt->close();
       echo("<script LANGUAGE='JavaScript'>
       Swal.fire({
         icon: 'error',
