@@ -5,7 +5,7 @@ $DATABASE_HOST = 'localhost';
 //datmacki_datamaster
 $DATABASE_USER = 'root';
 //datmacki_root
-$DATABASE_PASS = '';
+$DATABASE_PASS = 'LautaroWarh7';
 $DATABASE_NAME = 'datamaster';
 
 

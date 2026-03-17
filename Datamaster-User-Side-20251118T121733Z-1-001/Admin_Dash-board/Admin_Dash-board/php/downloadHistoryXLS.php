@@ -1,6 +1,7 @@
 <?php
 // Include database connection
 include('../php/connection.php');
+include("../php/auth_session.php");
 
 // Include PhpSpreadsheet
 require_once('../vendor/autoload.php');
@@ -8,56 +9,136 @@ require_once('../vendor/autoload.php');
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-// Create new spreadsheet
+// Create spreadsheet
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 
-// Set headers
+// ===== HEADERS =====
 $sheet->setCellValue('A1', 'ID');
-$sheet->setCellValue('B1', 'Email Address');
-$sheet->setCellValue('C1', 'First Name');
-$sheet->setCellValue('D1', 'Last Name');
-$sheet->setCellValue('E1', 'Mobile Number');
-$sheet->setCellValue('F1', 'Time In');
-$sheet->setCellValue('G1', 'Time Out');
+$sheet->setCellValue('B1', 'Name');
+$sheet->setCellValue('C1', 'Surname');
+$sheet->setCellValue('D1', 'Phone');
+$sheet->setCellValue('E1', 'Email');
+$sheet->setCellValue('F1', 'Visitor Name');
+$sheet->setCellValue('G1', 'Sign In Time');
+$sheet->setCellValue('H1', 'Sign Out Time');
 
-// Query the database
-$query = "SELECT email_phone, person_name, person_surname, person_contact, timein, timeout FROM `questions_table`";
+// ===== FETCH DATA FROM visitorstbl =====
+$query = "SELECT name, surname, phone_number, email, visitorName, signInTime, EvacuatingTime 
+          FROM visitorstbl 
+          ORDER BY signInTime DESC";
+
 $res = mysqli_query($conn, $query);
 
 if ($res && mysqli_num_rows($res) > 0) {
-    $rowIndex = 2; // Start writing from the second row
-    $no = 1;       // ID column
+
+    $rowIndex = 2;
+    $no = 1;
 
     while ($row = mysqli_fetch_assoc($res)) {
-        $sheet->setCellValue('A' . $rowIndex, $no); // ID
-        $sheet->setCellValue('B' . $rowIndex, $row["email_phone"]);
-        $sheet->setCellValue('C' . $rowIndex, $row["person_name"]);
-        $sheet->setCellValue('D' . $rowIndex, $row["person_surname"]);
-        $sheet->setCellValue('E' . $rowIndex, $row["person_contact"]);
-        $sheet->setCellValue('F' . $rowIndex, $row["timein"]);
-        $sheet->setCellValue('G' . $rowIndex, $row["timeout"]);
+
+        // Handle visitors still inside
+        $timeout = $row["EvacuatingTime"] ? $row["EvacuatingTime"] : "Still Inside";
+
+        $sheet->setCellValue('A' . $rowIndex, $no);
+        $sheet->setCellValue('B' . $rowIndex, $row["name"]);
+        $sheet->setCellValue('C' . $rowIndex, $row["surname"]);
+        $sheet->setCellValue('D' . $rowIndex, $row["phone_number"]);
+        $sheet->setCellValue('E' . $rowIndex, $row["email"]);
+        $sheet->setCellValue('F' . $rowIndex, $row["visitorName"]);
+        $sheet->setCellValue('G' . $rowIndex, $row["signInTime"]);
+        $sheet->setCellValue('H' . $rowIndex, $timeout);
 
         $rowIndex++;
         $no++;
     }
 
-    // Auto-size columns for better readability
-    foreach (range('A','G') as $col) {
+    // Auto-size columns
+    foreach (range('A', 'H') as $col) {
         $sheet->getColumnDimension($col)->setAutoSize(true);
     }
 
-    // Create writer
+    // ===== OUTPUT =====
     $writer = IOFactory::createWriter($spreadsheet, 'Xls');
 
-    // Output to browser
     header('Content-Type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment; filename="History_Report.xls"');
+    header('Content-Disposition: attachment; filename="Visitor_History_Report.xls"');
     header('Cache-Control: max-age=0');
 
     $writer->save('php://output');
     exit;
+
 } else {
-    echo "No data found to export.";
+    echo "No visitor records found.";
+}
+?><?php
+// Include database connection
+include('../php/connection.php');
+include("../php/auth_session.php");
+
+// Include PhpSpreadsheet
+require_once('../vendor/autoload.php');
+
+// Create spreadsheet
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+
+// ===== HEADERS =====
+$sheet->setCellValue('A1', 'ID');
+$sheet->setCellValue('B1', 'Name');
+$sheet->setCellValue('C1', 'Surname');
+$sheet->setCellValue('D1', 'Phone');
+$sheet->setCellValue('E1', 'Email');
+$sheet->setCellValue('F1', 'Visitor Name');
+$sheet->setCellValue('G1', 'Sign In Time');
+$sheet->setCellValue('H1', 'Sign Out Time');
+
+// ===== FETCH DATA FROM visitorstbl =====
+$query = "SELECT name, surname, phone_number, email, visitorName, signInTime, EvacuatingTime 
+          FROM visitorstbl 
+          ORDER BY signInTime DESC";
+
+$res = mysqli_query($conn, $query);
+
+if ($res && mysqli_num_rows($res) > 0) {
+
+    $rowIndex = 2;
+    $no = 1;
+
+    while ($row = mysqli_fetch_assoc($res)) {
+
+        // Handle visitors still inside
+        $timeout = $row["EvacuatingTime"] ? $row["EvacuatingTime"] : "Still Inside";
+
+        $sheet->setCellValue('A' . $rowIndex, $no);
+        $sheet->setCellValue('B' . $rowIndex, $row["name"]);
+        $sheet->setCellValue('C' . $rowIndex, $row["surname"]);
+        $sheet->setCellValue('D' . $rowIndex, $row["phone_number"]);
+        $sheet->setCellValue('E' . $rowIndex, $row["email"]);
+        $sheet->setCellValue('F' . $rowIndex, $row["visitorName"]);
+        $sheet->setCellValue('G' . $rowIndex, $row["signInTime"]);
+        $sheet->setCellValue('H' . $rowIndex, $timeout);
+
+        $rowIndex++;
+        $no++;
+    }
+
+    // Auto-size columns
+    foreach (range('A', 'H') as $col) {
+        $sheet->getColumnDimension($col)->setAutoSize(true);
+    }
+
+    // ===== OUTPUT =====
+    $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment; filename="Visitor_History_Report.xls"');
+    header('Cache-Control: max-age=0');
+
+    $writer->save('php://output');
+    exit;
+
+} else {
+    echo "No visitor records found.";
 }
 ?>

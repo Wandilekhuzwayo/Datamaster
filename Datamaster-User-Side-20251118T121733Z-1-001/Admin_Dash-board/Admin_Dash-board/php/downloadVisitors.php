@@ -5,12 +5,10 @@ include('../php/connection.php');
 // Declare a variable
 $output = '';
 
-// Query to get active visitors (timeout is empty)
-$query = "SELECT u.fname, u.lname, u.mnum, u.email, q.timein 
-          FROM `user_table` AS u 
-          INNER JOIN `questions_table` AS q 
-          ON u.email = q.email_phone 
-          WHERE q.timeout = ''";
+// Correct query (NO empty string comparison)
+$query = "SELECT name, surname, phone_number, email, signInTime 
+          FROM visitorstbl
+          WHERE EvacuatingTime IS NULL";
 
 $result = mysqli_query($conn, $query);
 
@@ -40,11 +38,11 @@ if ($result && mysqli_num_rows($result) > 0) {
         $output .= '
         <tr>
           <td>'.$no.'</td> 
-          <td>'.$row["fname"].'</td> 
-          <td>'.$row["lname"].'</td> 
-          <td>'.$row["mnum"].'</td> 
+          <td>'.$row["name"].'</td> 
+          <td>'.$row["surname"].'</td> 
+          <td>'.$row["phone_number"].'</td> 
           <td>'.$row["email"].'</td>  
-          <td>'.$row["timein"].'</td>  
+          <td>'.$row["signInTime"].'</td>  
         </tr>
         ';
         $no++;
@@ -52,15 +50,14 @@ if ($result && mysqli_num_rows($result) > 0) {
 
     $output .= '</table>';
 
-    // Send headers to download as XLS
+    // Send headers to download as Excel
     header("Content-Type: application/vnd.ms-excel");
-    header("Content-Disposition: attachment; filename=Visitors_Report.xls");
+    header("Content-Disposition: attachment; filename=Active_Visitors_Report.xls");
     header("Cache-Control: max-age=0");
 
-    // Output the file
     echo $output;
-    exit(); // Stop further output
+    exit();
 } else {
-    echo "No records found.";
+    echo "No active visitors found.";
 }
 ?>

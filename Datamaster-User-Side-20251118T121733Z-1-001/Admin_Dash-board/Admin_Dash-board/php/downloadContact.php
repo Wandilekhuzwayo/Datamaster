@@ -13,14 +13,13 @@ $emailAddres = $_SESSION["firstname"];
 $currentDatetime = date("Y-m-d H:i:s");
 
 // Query for user info (optional, if needed in PDF header)
-$result = mysqli_query($conn, "SELECT firstname, surname, email, companyname, employeeNo, department FROM `admin_table` WHERE email ='$emailAddres'");
+$result = mysqli_query($conn, "SELECT firstname, surname, email, companyname, department FROM `admin_table` WHERE email ='$emailAddres'");
 if ($result && mysqli_num_rows($result) > 0) {
     $row = mysqli_fetch_assoc($result);
     $firstname = $row['firstname'];
     $lastname = $row['surname'];
     $email = $row['email'];
     $Enterprise = $row['companyname'];
-    $employeeID = $row['employeeNo'];
     $department = $row['department'];
 }
 
