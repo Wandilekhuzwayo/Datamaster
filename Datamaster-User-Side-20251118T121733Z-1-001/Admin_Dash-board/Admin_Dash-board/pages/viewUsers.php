@@ -300,7 +300,7 @@
                                       </td>
                                       
                                       <td>
-                                        <?php echo $data['address']; ?>
+                                        <?php echo $data['addresses']; ?>
                                       </td>
                                       
                                       <td>

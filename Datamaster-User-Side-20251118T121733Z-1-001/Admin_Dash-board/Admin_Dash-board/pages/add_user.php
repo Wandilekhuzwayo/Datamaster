@@ -1,47 +1,35 @@
 <?php 
-  // Call Auth_session on Home
-  include("../php/auth_session.php");
+// Call Auth_session on Home
+include("../php/auth_session.php");
 
-  // Get Connection
-  include ('../php/connection.php');
+// Get Connection
+include ('../php/connection.php');
 
-  // Retrive custom_Retriv
-  include('../DataFetchers/VisitFetchTBL/custom_Retriv.php');
-  if (isset($_POST['custom_report'])) {
-    // Get the selected year & month from the form
-    $fromDate = $_POST['fromDate'];
-    $toDate = $_POST['toDate'];
+if(isset($_POST['add_user'])){
 
-    try {
-        $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$firstname = $_POST['firstname'];
+$lastname = $_POST['lastname'];
+$email = $_POST['email'];
+$company = $_POST['companyname'];
+$contact = $_POST['contact'];
+$department = $_POST['department'];
+$password = $_POST['password'];
 
-        // Retrieve data from the database for the specified date range
-        $query = "
-            SELECT
-                DATE(signInTime) AS visit_date,
-                COUNT(*) AS visit_count,
-                visitorsname 
-            FROM
-                mock_data
-            WHERE
-                signInTime >= :fromDate AND vacuatingTime <= :toDate
-            GROUP BY
-                visitorsname, visit_date
-            ORDER BY
-                visit_date
-        ";
+$date = date("Y-m-d");
 
-        $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':fromDate', $fromDate);
-        $stmt->bindParam(':toDate', $toDate);
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$sql = "INSERT INTO user_table 
+(date,image,fname,lname,mnum,cname,email,addresses,country,province,city,code,name,surname,contact,subscription)
+VALUES
+('$date','','$firstname','$lastname','$contact','$company','$email','','','','','0','$firstname','$lastname','$contact','')";
 
-    } catch (PDOException $e) {
-        // Handle database connection errors
-        echo "Error: " . $e->getMessage();
-    }
+$result = mysqli_query($conn,$sql);
+
+if($result){
+    echo "<script>alert('User added successfully');</script>";
+}else{
+    echo mysqli_error($conn);
+}
+
 }
 ?>
 
@@ -226,56 +214,75 @@
             </div>
 
             <div class="card-body">
-                        <form action="../php/Auth.php" class="row form-signin needs-validation " method="post" novalidate autocomplete="off">
-                            <div class="col-md-6 mb-2">
-                                <label for="firstname" class="form-label">First Name:</label>
-                                <input type="text" class="form-control" name="firstname" id="firstname" placeholder="eg.John" required>
-                            </div>
-                            <div class="col-md-6 mb-2">  
-                                <label for="lastname" class="form-label">Last Name:</label>
-                                <input type="text" class="form-control" name="lastname" id="lastname" placeholder="eg.Smith" required>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label for="email" class="form-label">Email:</label>
-                                <input type="text" class="form-control" name="email" id="email" placeholder="johnsmith@domain.com"required>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label for="lastname" class="form-label">Company Name:</label>
-                                <input type="text" class="form-control" name="companyname" id="companyname" placeholder="eg.SD Creatives" required>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label for="firstname" class="form-label">Employee Number:</label>
-                                <input type="text" class="form-control" name="employeeno" id="employeeno" placeholder="eg.02001" required>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label for="lastname" class="form-label">Department:</label>
-                                <input type="text" class="form-control" name="department" id="department" placeholder="eg.IT Department" required>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                 <label for="password" class="form-label">Password:</label>
-                                 <input type="password" class="form-control" name="password" id="password" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="conf-password" class="form-label">Re-Type Password:</label>
-                                <input type="password" class="form-control" name="conf-password" id="conf-password" required>
-                            <div class="invalid-feedback">Passwords do not match.</div>
-                </div>
+<form method="POST" class="row form-signin needs-validation" novalidate autocomplete="off">
 
-        
-            <div class="col-md-12 mb-3">
-            <div class="form-check">
-                <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" required>
-                <label class="form-check-label" for="form2Example3">
-                    Creating an account means you're okay with our <a href="#!">Terms of service</a>
-                </label>
-            </div>
-        </div>
+<div class="col-md-6 mb-2">
+<label class="form-label">First Name:</label>
+<input type="text" class="form-control" name="firstname" placeholder="eg.John" required>
+</div>
 
-          <div class="col-md-2 mb-3">
-            <input type="submit" value="Register" name="signup" class="btn px-5 btn-info">
+<div class="col-md-6 mb-2">  
+<label class="form-label">Last Name:</label>
+<input type="text" class="form-control" name="lastname" placeholder="eg.Smith" required>
+</div>
+
+<div class="col-md-6 mb-2">
+<label class="form-label">Email:</label>
+<input type="email" class="form-control" name="email" placeholder="johnsmith@domain.com" required>
+</div>
+
+<div class="col-md-6 mb-2">
+<label class="form-label">Company Name:</label>
+<input type="text" class="form-control" name="companyname" placeholder="eg.SD Creatives" required>
+</div>
+
+<div class="col-md-6 mb-2">
+<label class="form-label">Contact:</label>
+<input type="text" class="form-control" name="contact" placeholder="eg.0823456789" required>
+</div>
+
+<div class="col-md-6 mb-2">
+<label class="form-label">Department:</label>
+<input type="text" class="form-control" name="department" placeholder="eg.IT Department" required>
+</div>
+
+<div class="col-md-6 mb-2">
+<label class="form-label">Password:</label>
+<input type="password" class="form-control" name="password" required>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label">Re-Type Password:</label>
+<input type="password" class="form-control" name="conf-password" required>
+</div>
+
+<div class="card-body">
+
+<form method="POST" class="row needs-validation" novalidate autocomplete="off">
+
+    <div class="col-md-12 text-center mb-1">
+        <button type="submit" name="add_user" class="btn btn-primary px-1">
+            Add User
+        </button>
+    </div>
+
+    <div class="col-md-12 mb-3">
+        <div class="form-check text-center">
+            <input class="form-check-input me-2" type="checkbox" id="form2Example3c" required>
+            <label class="form-check-label" for="form2Example3c">
+                Creating an account means you're okay with our 
+                <a href="#">Terms of service</a>
+            </label>
         </div>
-         </form>
-     </div>
+    </div>
+
+    <div class="col-md-12 text-center mb-3">
+        <input type="submit" value="Register" name="signup" class="btn btn-info px-5">
+    </div>
+
+</form>
+
+</div>
 
      <script>
     // JavaScript for password matching validation
