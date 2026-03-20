@@ -1,12 +1,18 @@
 <?php
 
-// Change this to your connection info.
+// localhost connection
 $DATABASE_HOST = 'localhost';
-//datmacki_datamaster
 $DATABASE_USER = 'root';
-//datmacki_root
 $DATABASE_PASS = '';
 $DATABASE_NAME = 'datamaster';
+
+
+// productions connection
+// $DATABASE_HOST = 'localhost';
+// $DATABASE_USER = 'evendico_datamaster';
+// $DATABASE_PASS = 'Zx2gXSLMqCpsA6wP2wUK';
+// $DATABASE_NAME = 'evendico_datamaster';
+
 
 
 
