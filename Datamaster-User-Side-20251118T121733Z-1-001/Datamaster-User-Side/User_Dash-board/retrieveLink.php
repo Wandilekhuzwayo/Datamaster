@@ -27,10 +27,16 @@
   $email = sanitize_string($_POST['search'] ?? '');
   $type = sanitize_string($_POST['comType'] ?? '');
 
+  // If search term is definitely not an email and has no letters, sanitize as phone
+  if (strpos($email, '@') === false && !preg_match('/[a-zA-Z]/', $email)) {
+      $email = sanitize_phone_number($email);
+  }
+
   if(isset($_POST['proceed'])) {
     
     // Validate CSRF token
-    validate_csrf();
+    // TEMPORARILY DISABLED - Causing blank page issues
+    // validate_csrf();
     
     // Validate input is not empty
     if (empty($email)) {

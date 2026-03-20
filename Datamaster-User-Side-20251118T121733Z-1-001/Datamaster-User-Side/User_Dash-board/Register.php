@@ -17,6 +17,7 @@ require_once('csrf.php');
   <link rel="stylesheet" href="./CSS/register.css">
 </head>
 <body>
+  <?php include('navbar.php'); ?>
   <div class="form-body">
     <div class="row">
         <div class="form-holder">
@@ -40,7 +41,8 @@ require_once('csrf.php');
                         </div>
 
                         <div class="col-md-12">
-                            <input class="form-control" type="tel" name="phone" id="mobileNum" placeholder="Phone Number" required>
+                            <input class="form-control" type="tel" name="phone" id="mobileNum" placeholder="e.g. 072 123 4567" maxlength="15" oninput="countPhoneDigits(this, 'phone_count')" required>
+                            <small id="phone_count" class="text-muted small">0/11 digits</small>
                             <div class="invalid-feedback">This field cannot be blank!</div>
                         </div>
 
@@ -94,7 +96,8 @@ require_once('csrf.php');
                             <div class="invalid-feedback">This field cannot be blank!</div>
                         </div>
                         <div class="col-md-12">
-                            <input class="form-control" type="tel" name="cnumber" placeholder="Contact Number" required>
+                            <input class="form-control" type="tel" name="cnumber" placeholder="e.g. 072 123 4567" maxlength="15" oninput="countPhoneDigits(this, 'cnumber_count')" required>
+                            <small id="cnumber_count" class="text-muted small">0/11 digits</small>
                             <div class="invalid-feedback">This field cannot be blank!</div>
                         </div>
 

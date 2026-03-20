@@ -8,20 +8,20 @@ include('../php/connection.php');
 //Call a unique variable from progress page
 //$email = $_GET['email'];
 
-//Do a query for current visitors
-$count = mysqli_query($conn, "SELECT COUNT(timeout) AS total FROM `questions_table` AS q INNER JOIN `user_table` AS u ON q.email_phone = u.email  WHERE q.timeout = '" . " " . "' ");
+//Do a query for current visitors (not signed out)
+$count = mysqli_query($conn, "SELECT COUNT(*) AS total FROM visitorstbl WHERE EvacuatingTime IS NULL");
 
 $row = mysqli_fetch_assoc($count);
 $total = $row['total'];
 
 //Do a query for today's visitors in
-$todayin = mysqli_query($conn, "SELECT COUNT(*) AS todayin FROM `user_table` ");
+$todayin = mysqli_query($conn, "SELECT COUNT(*) AS todayin FROM visitorstbl WHERE DATE(signInTime) = CURDATE()");
 
 $row1 = mysqli_fetch_assoc($todayin);
 $total2 = $row1['todayin'];
 
 //Do a query for today's visitors out
-$todayout = mysqli_query($conn, "SELECT COUNT(*) AS todayout FROM `questions_table` WHERE timeout > 0 ");
+$todayout = mysqli_query($conn, "SELECT COUNT(*) AS todayout FROM visitorstbl WHERE DATE(EvacuatingTime) = CURDATE()");
 
 $row2 = mysqli_fetch_assoc($todayout);
 $total3 = $row2['todayout'];
@@ -308,8 +308,9 @@ if (isset($_POST['profileLnk'])) {
                                         <now format="d" class="h4 mt0"><?php echo date('d'); ?></now>
                                         <now format="mmm" class="h4 mt0"><?php echo date('F'); ?></now>
 
-                                        <!--now format="EEEE" class="text-uppercase"><? php // echo date('l'); 
-                                                                                        ?></now-->
+                                        <!--now format="EEEE" class="text-uppercase">
+                                        <?php // echo date('l'); ?>
+                                        </now-->
                                     </div>
                                     <div class="text-lowercase ng-binding">
                                     <now format="eeee" class="text-uppercase"><?php echo date('l,'); ?></now>
@@ -347,7 +348,13 @@ if (isset($_POST['profileLnk'])) {
                                     <em class="fa fa-calendar fa-3x"></em>
                                 </div>
                                 <div class="col-xs-8 pv-lg">
-                                    <div class="h2 mt0 ng-binding">0</div>
+                                    <?php
+                                        $monthly = mysqli_query($conn, "SELECT COUNT(*) AS totalMonth FROM visitorstbl WHERE MONTH(signInTime) = MONTH(CURDATE()) AND YEAR(signInTime) = YEAR(CURDATE())");
+                                        
+                                        $rowMonth = mysqli_fetch_assoc($monthly);
+                                        $totalMonth = $rowMonth['totalMonth'];
+                                    ?>
+                                <div class="h2 mt0 ng-binding"><?php echo $totalMonth; ?></div>
                                     <div class="text-uppercase ng-binding">MONTHLY VISIT</div>
                                 </div>
                             </div>

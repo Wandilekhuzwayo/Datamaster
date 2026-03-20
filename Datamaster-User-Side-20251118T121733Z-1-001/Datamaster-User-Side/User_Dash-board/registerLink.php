@@ -1,12 +1,15 @@
-<?php 
+<?php
   //Start the session
   session_start();
+  
+  // Include validation functions
+  require_once('validation.php');
 
   //storing the session data
   if(isset($_POST["next"])){
     $_SESSION["firstname"] = $_POST['name'];
     $_SESSION["surname"] = $_POST['surname'];
-    $_SESSION["mobile"] = $_POST['phone'];
+    $_SESSION["mobile"] = sanitize_phone_number($_POST['phone']);
     $_SESSION["organization"] = $_POST['company'];
     $_SESSION["emailAddress"] = $_POST['email'];
     $_SESSION["homeAddress"] = $_POST['address'];
@@ -16,7 +19,7 @@
     $_SESSION["postalCode"] = $_POST['code'];
     $_SESSION["firstName"] = $_POST['fname'];
     $_SESSION["lastname"] = $_POST['lname'];
-    $_SESSION["telephone"] = $_POST['cnumber'];
+    $_SESSION["telephone"] = sanitize_phone_number($_POST['cnumber']);
     $_SESSION["subscription"] = $_POST['subscribe'];
 
     header("Location: Record.php");

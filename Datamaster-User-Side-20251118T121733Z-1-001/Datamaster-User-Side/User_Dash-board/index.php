@@ -18,7 +18,7 @@
 <body>
   <div class="form-container">
     <div class="img">
-      <strong><img src="./Images/Logo.png" alt="Logo" class="responsive" /></strong>
+      <strong><a href="/Datamaster/"><img src="./Images/Logo.png" alt="Logo" class="responsive" /></a></strong>
     </div>
     <div class="row1-container">
       <div class="box box-down green">

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Registration Flow Test</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .info {
+            color: blue;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>User Registration Flow Test</h2>
+
+    <div id="status"></div>
+
+    <h3>Step 1: Test Register Page</h3>
+    <button onclick="testRegister()">Test Register.php</button>
+    <div id="register-result"></div>
+
+    <h3>Step 2: Test Record Page</h3>
+    <button onclick="testRecord()">Test Record.php</button>
+    <div id="record-result"></div>
+
+    <h3>Step 3: Test Retrieve Page</h3>
+    <button onclick="testRetrieve()">Test Retrieve.php</button>
+    <div id="retrieve-result"></div>
+
+    <h3>Step 4: Test Database Connection</h3>
+    <button onclick="testDatabase()">Test Database</button>
+    <div id="db-result"></div>
+
+    <script>
+        const basePath = '/Datamaster/Datamaster-User-Side-20251118T121733Z-1-001/Datamaster-User-Side/User_Dash-board/';
+
+        function testRegister() {
+            document.getElementById('register-result').innerHTML = '<p class="info">Testing...</p>';
+            fetch(basePath + 'Register.php')
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('register-result').innerHTML =
+                            '<p class="success">✅ Register.php loads successfully</p>';
+                    } else {
+                        document.getElementById('register-result').innerHTML =
+                            '<p class="error">❌ Register.php returned status: ' + response.status + '</p>';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('register-result').innerHTML =
+                        '<p class="error">❌ Error: ' + error.message + '</p>';
+                });
+        }
+
+        function testRecord() {
+            document.getElementById('record-result').innerHTML = '<p class="info">Testing...</p>';
+            fetch(basePath + 'Record.php')
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('record-result').innerHTML =
+                            '<p class="success">✅ Record.php loads successfully</p>';
+                    } else {
+                        document.getElementById('record-result').innerHTML =
+                            '<p class="error">❌ Record.php returned status: ' + response.status + '</p>';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('record-result').innerHTML =
+                        '<p class="error">❌ Error: ' + error.message + '</p>';
+                });
+        }
+
+        function testRetrieve() {
+            document.getElementById('retrieve-result').innerHTML = '<p class="info">Testing...</p>';
+            fetch(basePath + 'Retrieve.php')
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('retrieve-result').innerHTML =
+                            '<p class="success">✅ Retrieve.php loads successfully</p>';
+                    } else {
+                        document.getElementById('retrieve-result').innerHTML =
+                            '<p class="error">❌ Retrieve.php returned status: ' + response.status + '</p>';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('retrieve-result').innerHTML =
+                        '<p class="error">❌ Error: ' + error.message + '</p>';
+                });
+        }
+
+        function testDatabase() {
+            document.getElementById('db-result').innerHTML = '<p class="info">Testing...</p>';
+            fetch('/Datamaster/test_db_connection.php')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('db-result').innerHTML = data;
+                })
+                .catch(error => {
+                    document.getElementById('db-result').innerHTML =
+                        '<p class="error">❌ Error: ' + error.message + '</p>';
+                });
+        }
+    </script>
+</body>
+
+</html>

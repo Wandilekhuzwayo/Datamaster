@@ -6,18 +6,34 @@ include("../php/auth_session.php");
 include('../php/connection.php');
 
 // Select query
- if(isset($_POST['search-info'])){
+ if (isset($_POST['search-info'])) {
     $searchValue = $_POST['search'];
-    $query = "SELECT id, email_phone, person_name, person_surname, person_contact, timein, timeout FROM `questions_table` WHERE CONCAT(`email_phone`, `person_name`, `person_surname`, `person_contact`, `timein`, `timeout`) LIKE '%".$searchValue."%'";
-    $result = filterTable($query);
-  }
-  else {
-    $query = "SELECT id, email_phone, person_name, person_surname, person_contact, timein, timeout
-    FROM questions_table
-    WHERE timeout = '';
+
+    $query = "
+        SELECT *
+        FROM visitorstbl
+        WHERE CONCAT(
+            name,
+            surname,
+            number,
+            email,
+            visitorName,
+            signInTime
+        ) LIKE '%$searchValue%'
     ";
     $result = filterTable($query);
-  }
+
+} else {
+
+    // Active visitors = NOT signed out
+    $query = "
+        SELECT *
+        FROM visitorstbl
+        WHERE EvacuatingTime IS NULL
+    ";
+    $result = filterTable($query);
+}
+
 
 function filterTable($query) {
   // Get Connection
@@ -138,7 +154,7 @@ function filterTable($query) {
                                 <li class="dropdown nav-item">
                                     <!-- Query for fetch from the table -->
                                     <?php 
-                                        $sql = "SELECT * FROM `questions_table`  WHERE status='0' AND timeout > 0 ORDER BY id DESC";
+                                        $sql = " SELECT *FROM visitorstbl WHERE EvacuatingTime IS NOT NULL ORDER BY id DESC";
                                         $res = mysqli_query($conn, $sql); 
                                     ?>
                                     <a href="#" class="nav-link" data-toggle="dropdown" id="notifications">
@@ -150,8 +166,9 @@ function filterTable($query) {
                                         if (mysqli_num_rows($res) > 0) {
                                             foreach ($res as $item) {
                                                 ?>
-                                                <li><?php echo $item["email_phone"]?></li>
-                                                <li><?php echo 'signed out at ',$item["timeout"]; ?></li>
+                                                <li><?php echo $item["visitorName"]; ?></li>
+                                                <li><?php echo 'signed out at ' . $item["EvacuatingTime"]; ?></li>
+
                                             <?php }
                                         } ?>
                                     </ul>
@@ -211,11 +228,12 @@ function filterTable($query) {
                                                 ?>
                                                         <tr>
                                                             <td><?php echo $no; ?></td>
-                                                            <td><?php echo ucwords(strtolower($data['person_name'])); ?></td>
-                                                            <td><?php echo ucwords(strtolower($data['person_surname'])); ?></td>
-                                                            <td><?php echo $data['person_contact']; ?></td>
-                                                            <td><?php echo strtolower($data['email_phone']); ?></td>
-                                                            <td><?php echo $data['timein']; ?></td>
+                                                            <td><?php echo ucwords(strtolower($data['name'])); ?></td>
+                                                            <td><?php echo ucwords(strtolower($data['surname'])); ?></td>
+                                                            <td><?php echo $data['phone_number']; ?></td>
+                                                            <td><?php echo ucwords(strtolower($data['visitorName'])); ?></td>
+                                                            <td><?php echo $data['signInTime']; ?></td>
+
                                                         </tr>
                                                 <?php
                                                         $no++;

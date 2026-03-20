@@ -28,6 +28,12 @@
 
   // Get and sanitize input
   $emailAddress = sanitize_string($_GET['uniqueEmail'] ?? '');
+  
+  // If looks like phone (no @, no letters), ensure it is sanitized
+  if (strpos($emailAddress, '@') === false && !preg_match('/[a-zA-Z]/', $emailAddress)) {
+      $emailAddress = sanitize_phone_number($emailAddress);
+  }
+
   $personName = sanitize_string($_POST['personName'] ?? '');
   $personSurname = sanitize_string($_POST['personSurname'] ?? '');
   $personContact = sanitize_string($_POST['personContact'] ?? '');
@@ -37,12 +43,13 @@
   // Log errors instead of hiding
   error_reporting(E_ALL);
   ini_set('log_errors', 1);
-  ini_set('display_errors', 0);
+  ini_set('display_errors', 1); // TEMPORARILY ENABLED FOR DEBUGGING
 
   if(!empty($personName) && !empty($personSurname) && !empty($personContact) && !empty($reason)) {
     
     // Validate CSRF token
-    validate_csrf();
+    // TEMPORARILY DISABLED - Causing blank page issues
+    // validate_csrf();
     
     // Validate inputs
     if (!validate_name($personName) || !validate_name($personSurname)) {

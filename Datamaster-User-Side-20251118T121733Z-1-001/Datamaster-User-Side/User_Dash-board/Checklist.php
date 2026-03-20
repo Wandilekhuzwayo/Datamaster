@@ -62,6 +62,7 @@
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body onload="mydate()">
+<?php include('navbar.php'); ?>
   <?php if ($userData): ?>
   <div class="wrapper">
     <div class="form-left">

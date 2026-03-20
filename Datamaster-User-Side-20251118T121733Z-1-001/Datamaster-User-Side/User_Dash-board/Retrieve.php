@@ -18,6 +18,8 @@ require_once('csrf.php');
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+  <?php include('navbar.php'); ?>
+  <div class="form-wrapper">
   <div class="form-container">
     <div class="img">
       <strong><img src="./Images/Logo.png" alt="Logo" class="responsive"/></strong>
@@ -42,6 +44,7 @@ require_once('csrf.php');
           </div>
       </div>
   </form>
+  </div>
   </div>
   <script defer src="./JS/restrict.js"></script>
 </body>
